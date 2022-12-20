@@ -6,10 +6,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class Menu extends Application {
+public class Dactylo extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Menu.class.getResource("menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Dactylo.class.getResource("menu.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
         stage.setTitle("Hello!");
         stage.show();

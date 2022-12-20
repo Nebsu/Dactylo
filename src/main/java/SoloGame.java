@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class SoloGame {
@@ -15,18 +16,30 @@ public class SoloGame {
     private ArrayList <String> words = new ArrayList<>();
 
     private int hitcounter = 0;
-    private int misscounter = 0;
+    private int errorcounter = 0;
+    private int utilcharcounter = 0;
+    private int inputcounter = 0;
     private int index = 0;
     private boolean gamestarted = false;
     private boolean textreveal = false;
     Timer timer = new Timer();
-
+    private int countdown = 0;
+    private int time = 0;
+    private DecimalFormat df = new DecimalFormat("#.#");
+    @FXML
+    private Label timelbl = new Label();
     @FXML
     private Label timerlbl = new Label();
     @FXML
     private Label text = new Label();
     @FXML
     private TextField input;
+    @FXML
+    private Label wpm = new Label();
+    @FXML
+    private Label accuracy = new Label();
+    @FXML
+    private Label regularity = new Label();
     public SoloGame() throws FileNotFoundException {
         try {
             BufferedReader in = new BufferedReader(new FileReader("src/main/resources/words.txt"));
@@ -54,8 +67,12 @@ public class SoloGame {
                 if (newValue.length() <= words.get(0).length()) {
                     if (!newValue.equals(words.get(0).substring(0, newValue.length()))) {
                         input.setStyle("-fx-text-fill: red;");
+                        errorcounter++;
                     } else {
                         input.setStyle("-fx-text-fill: black;");
+                        if (!newValue.equals(" ")){
+                            utilcharcounter++;
+                        }
                     }
                 } else {
                     input.setStyle("-fx-text-fill: red;");
@@ -66,9 +83,8 @@ public class SoloGame {
 
     public void remakeList(){
         words.clear();
-        for (int i = 0; i < 50; i++) {
-            words.add(dictionnary.get((int) (Math.random() * dictionnary.size())));
-        }
+        dictionnary.stream().limit(25).forEach(words::add);
+        Collections.shuffle(words);
         text.setText(String.join(" ", words));
     }
 
@@ -79,19 +95,28 @@ public class SoloGame {
 
     public void timerStart(){
         timer.scheduleAtFixedRate(new TimerTask() {
-            int i = 60;
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    timerlbl.setText(String.valueOf(i));
-                    i--;
-                    if(i == -1){
+                    timerlbl.setText(String.valueOf(countdown));
+                    countdown++;
+                    if(words.isEmpty()){
+                        timelbl.setText("");
                         timer.cancel();
                     }
                 });
             }
         }, 0, 1000);
     }
+
+    public void setWpm(){
+        wpm.setText("" + df.format(((float)utilcharcounter / 5) / ((float)countdown / 60)));
+    }
+
+    public void setAccuracy(){
+        accuracy.setText(String.valueOf((int) ((utilcharcounter / (double) inputcounter) * 100)));
+    }
+
 
     // when space is pressed, check if the word is in the list
     public void checkWord(KeyEvent event) {
@@ -100,18 +125,17 @@ public class SoloGame {
             timer = new Timer();
             timerStart();
         }
-        if (words.isEmpty()) {
-            text.setText("You won!, hit: " + hitcounter + " miss: " + misscounter);
-            return;
-        }
-        if (event.getCode() == KeyCode.ESCAPE && gamestarted == true) {
+        if (event.getCode() == KeyCode.ESCAPE) {
+            countdown = 0;
             hitcounter = 0;
-            misscounter = 0;
+            errorcounter = 0;
+            utilcharcounter = 0;
+            inputcounter = 0;
             index = 0;
             gamestarted = false;
             textreveal = false;
             input.clear();
-            timerlbl.setText("60");
+            timerlbl.setText("" + countdown);
             remakeList();
             if(timer != null){
                 timer.cancel();
@@ -124,9 +148,9 @@ public class SoloGame {
                 System.out.println("Correct");
                 input.setStyle("-fx-text-fill: black");
             } else {
-                misscounter++;
                 System.out.println("Incorrect");
                 input.setStyle("-fx-text-fill: black");
+                errorcounter += words.get(0).length();
             }
             words.remove(0);
             //update text in label without the word
@@ -135,17 +159,23 @@ public class SoloGame {
             index = 0;
             input.clear();
             event.consume();
+        }else if (event.getCode() == KeyCode.ALPHANUMERIC){
+            inputcounter++;
         }
     }
     public void removeSpace(KeyEvent event) {
         if (event.getCode() == KeyCode.SPACE) {
+            if (words.isEmpty()) {
+                timer.cancel();
+                time = countdown;
+                timelbl.setText(""+time);
+                text.setText("You won!, hit: " + utilcharcounter + " miss: " + errorcounter);
+                setWpm();
+                setAccuracy();
+            }
             input.clear();
             event.consume();
         }
+
     }
-
-
-
-
-
 }

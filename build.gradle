@@ -24,7 +24,7 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainClass = 'Menu'
+    mainClass = 'Dactylo'
 }
 
 javafx {
