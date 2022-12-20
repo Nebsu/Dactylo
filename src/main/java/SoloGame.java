@@ -120,7 +120,7 @@ public class SoloGame {
     }
 
     public void setWpm(){
-        wpm.setText("" + df.format((float)utilcharcounter / 5);
+        wpm.setText("" + df.format((float)utilcharcounter / 5));
     }
 
     public void setAccuracy(){
