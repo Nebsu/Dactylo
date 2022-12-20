@@ -21,7 +21,6 @@ public class MenuController {
     private Button quitbutton;
     @FXML
     private Scene scene;
-    private Parent root;
     private Stage stage;
 
 
