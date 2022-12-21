@@ -17,14 +17,12 @@ import java.util.*;
 public class SoloGame {
     private ArrayList <String> dictionnary = new ArrayList<>();
     private ArrayList <String> words = new ArrayList<>();
-
+    //number of times the user has hit the space bar = number of words typed
     private int hitcounter = 0;
     private int errorcounter = 0;
     private int utilcharcounter = 0;
     private int inputcounter = 0;
-    private int nbWords = 0;
     private boolean gamestarted = false;
-    private boolean textreveal = false;
     Timer timer = new Timer();
     private int countdown = 60;
     private DecimalFormat df = new DecimalFormat("#.#");
@@ -58,10 +56,7 @@ public class SoloGame {
 
     @FXML
     public void initialize() {
-        if(textreveal == false) {
-            remakeList();
-            textreveal = true;
-        }
+        remakeList();
         Font font = Font.font("Arial", FontWeight.BOLD,18);
         input.setFont(font);
         input.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -69,9 +64,11 @@ public class SoloGame {
             if (newValue.length() <= words.get(0).length()) {
                 if (!newValue.equals(words.get(0).substring(0, newValue.length()))) {
                     input.setStyle("-fx-text-fill: red;");
+                    //increment when the character is wrong
                     errorcounter++;
                 } else {
                     input.setStyle("-fx-text-fill: #383734;");
+                    //increment when the character is correct
                     utilcharcounter++;
                 }
             } else {
@@ -103,14 +100,10 @@ public class SoloGame {
                     countdown--;
                     if(countdown < 0){
                         timer.cancel();
-                        if (utilcharcounter > nbWords) {
-                            utilcharcounter -= nbWords;
-                        }
-                        if (errorcounter >= nbWords) {
-                            errorcounter -= nbWords;
-                        }
+                        utilcharcounter -= hitcounter;
+                        errorcounter -= hitcounter;
                         timelbl.setText(""+countdown);
-                        text.setText("You won!, hit: " + utilcharcounter + " miss: " + errorcounter);
+                        text.setText("Press escape to restart");
                         setWpm();
                         setAccuracy();
                     }
@@ -127,6 +120,9 @@ public class SoloGame {
         float grossWPM = (float)utilcharcounter / 5;
         float netWPM = grossWPM - (float)errorcounter / 5;
         float accur = (netWPM / grossWPM) * 100;
+        if (accur < 0) {
+            accur = 0;
+        }
         accuracy.setText("" + df.format(accur) + "%");
     }
 
@@ -136,9 +132,7 @@ public class SoloGame {
         errorcounter = 0;
         utilcharcounter = 0;
         inputcounter = 0;
-        nbWords = 0;
         gamestarted = false;
-        textreveal = false;
         input.clear();
         timerlbl.setText("" + countdown);
         remakeList();
@@ -160,18 +154,12 @@ public class SoloGame {
         }
         if (event.getCode() == KeyCode.SPACE) {
             String word = input.getText();
-            if (words.get(0).equals(word)) {
-                hitcounter++;
-                System.out.println("Correct");
-                input.setStyle("-fx-text-fill: #383734");
-                nbWords++;
-            } else {
-                System.out.println("Incorrect");
-                input.setStyle("-fx-text-fill: #383734");
-                errorcounter += words.get(0).length();
-            }
+            if (!words.get(0).equals(word)) errorcounter += words.get(0).length();
+            hitcounter++;
+            input.setStyle("-fx-text-fill: #383734");
             words.remove(0);
             words.add(dictionnary.get(new Random().nextInt(dictionnary.size())));
+            //refresh the text
             text.setText(String.join(" ", words));
             input.clear();
             event.consume();
