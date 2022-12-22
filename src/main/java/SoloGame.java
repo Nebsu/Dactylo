@@ -27,8 +27,6 @@ public class SoloGame {
     private int countdown = 60;
     private DecimalFormat df = new DecimalFormat("#.#");
     @FXML
-    private Label timelbl = new Label();
-    @FXML
     private Label timerlbl = new Label();
     @FXML
     private Label text = new Label();
@@ -43,7 +41,6 @@ public class SoloGame {
     public SoloGame() throws FileNotFoundException {
         try {
             BufferedReader in = new BufferedReader(new FileReader("src/main/resources/words.txt"));
-
             String word;
             while ((word = in.readLine()) != null) {
                 dictionnary.add(word);
@@ -90,7 +87,6 @@ public class SoloGame {
         System.exit(0);
     }
 
-
     public void timerStart(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -102,7 +98,6 @@ public class SoloGame {
                         timer.cancel();
                         utilcharcounter -= hitcounter;
                         errorcounter -= hitcounter;
-                        timelbl.setText(""+countdown);
                         text.setText("Press escape to restart");
                         setWpm();
                         setAccuracy();

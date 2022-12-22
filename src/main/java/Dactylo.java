@@ -16,6 +16,9 @@ public class Dactylo extends Application {
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);
         stage.setAlwaysOnTop(false);
+        stage.setOnCloseRequest( event -> {
+            System.exit(0);
+        });
     }
 
     public static void main(String[] args) {
