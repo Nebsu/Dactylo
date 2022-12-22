@@ -157,7 +157,6 @@ public class SoloGame {
             //refresh the text
             text.setText(String.join(" ", words));
             input.clear();
-            event.consume();
         }else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE){
             inputcounter++;
         }
@@ -167,6 +166,5 @@ public class SoloGame {
             input.clear();
             event.consume();
         }
-
     }
 }
