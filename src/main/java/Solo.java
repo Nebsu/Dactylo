@@ -36,6 +36,7 @@ public class Solo extends Game {
         wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
         getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
         wordsLeft.setText("" + getWords().size());
+        healthlbl.setText("" + health);
         getInput().textProperty().addListener((observable, oldValue, newValue) -> {
             if (!getWords().isEmpty()) {
                 if (newValue.length() <= getWords().get(0).toString().length()) {
