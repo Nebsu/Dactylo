@@ -2,6 +2,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,6 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -21,15 +26,11 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class TrainingGame extends Game {
-    private boolean gamestate = false;
     Timer timer = new Timer();
     private int countdown = 60;
     private DecimalFormat df = new DecimalFormat("#.#");
     @FXML
     private Label timerlbl = new Label();
-
-    @FXML
-    private TextField input;
     @FXML
     private Label wpm = new Label();
     @FXML
@@ -39,38 +40,27 @@ public class TrainingGame extends Game {
     @FXML
     private Scene scene;
     private Stage stage;
-    public TrainingGame() throws FileNotFoundException {
-        try {
-            BufferedReader in = new BufferedReader(new FileReader("src/main/dictionary/easy.txt"));
-            String word;
-            while ((word = in.readLine()) != null) {
-                getDictionary().add(word);
-            }
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void initialize() {
+        setTextFieldColor();
+        setNewDictionary();
         remakeList();
-        Font font = Font.font("Arial", FontWeight.BOLD,18);
-
-        input.textProperty().addListener((observable, oldValue, newValue) -> {
+        getInput().textProperty().addListener((observable, oldValue, newValue) -> {
             //When we reach the end of the word
-            if (newValue.length() <= getWords().get(0).length()) {
-                if (!newValue.equals(getWords().get(0).substring(0, newValue.length()))) {
-                    input.setStyle("-fx-text-fill: red;");
+            if (newValue.length() <= getWords().get(0).toString().length()) {
+                if (!newValue.equals(getWords().get(0).toString().substring(0, newValue.length()))) {
+                    getInput().setStyle("-fx-text-fill: red;");
                     //increment when the character is wrong
                     setErrorcounter(getErrorcounter() + 1);
                 } else {
-                    input.setStyle("-fx-text-fill: #383734;");
+                    getInput().setStyle("-fx-text-fill: #383734;");
                     //increment when the character is correct
                     setUtilcharcounter(getUtilcharcounter() + 1);
                 }
             } else {
-                input.setStyle("-fx-text-fill: red;");
+                getInput().setStyle("-fx-text-fill: red;");
+                setErrorcounter(getErrorcounter() + 1);
             }
         });
     }
@@ -94,12 +84,16 @@ public class TrainingGame extends Game {
                     countdown--;
                     if(countdown < 0){
                         timer.cancel();
-                        setUtilcharcounter(getUtilcharcounter()-getHitcounter());
-                        setErrorcounter(getErrorcounter()-getHitcounter());
+                        setUtilcharcounter(getUtilcharcounter());
+                        setErrorcounter(getErrorcounter());
                         getText().setText("Press escape to restart");
                         setWpm();
                         setAccuracy();
-                        input.setEditable(false);
+                        getInput().setEditable(false);
+                        System.out.println("utilcharcounter: " + getUtilcharcounter());
+                        System.out.println("errorcounter: " + getErrorcounter());
+                        System.out.println("inputcounter: " + getInputcounter());
+                        System.out.println("hitcounter: " + getHitcounter());
                     }
                 });
             }
@@ -116,6 +110,8 @@ public class TrainingGame extends Game {
         float accur = (netWPM / grossWPM) * 100;
         if (accur < 0) {
             accur = 0;
+        } else if (accur > 100) {
+            accur = 100;
         }
         accuracy.setText("" + df.format(accur) + "%");
     }
@@ -126,21 +122,21 @@ public class TrainingGame extends Game {
         setUtilcharcounter(0);
         setErrorcounter(0);
         setInputcounter(0);
-        gamestate = false;
-        input.clear();
+        setGamestate(false);
+        getInput().clear();
         timerlbl.setText("" + countdown);
         remakeList();
         if(timer != null){
             timer.cancel();
         }
-        input.setEditable(true);
+        getInput().setEditable(true);
     }
 
 
     // when space is pressed, check if the word is in the list
     public void checkWord(KeyEvent event) {
-        if (gamestate == false) {
-            gamestate = true;
+        if (getGamestate() == false) {
+            setGamestate(true);
             timer = new Timer();
             timerStart();
         }
@@ -148,24 +144,24 @@ public class TrainingGame extends Game {
             reset();
         }
         if (event.getCode() == KeyCode.SPACE) {
-            String word = input.getText();
-            if (!getWords().get(0).equals(word)) setErrorcounter(getErrorcounter()+getWords().get(0).length());
+            String word = getInput().getText();
+            if (!getWords().get(0).toString().equals(word)) setErrorcounter(getErrorcounter() + getWords().get(0).toString().length());
             setHitcounter(getHitcounter() + 1);
-            input.setStyle("-fx-text-fill: #383734");
+            getInput().setStyle("-fx-text-fill: #383734");
             getWords().remove(0);
             getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
             //refresh the text
-            getText().setText(String.join(" ", getWords()));
-            input.clear();
-            input.setEditable(false);
+            getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
+            getInput().clear();
+            getInput().setEditable(false);
         }else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE){
             setInputcounter(getInputcounter() + 1);
         }
     }
     public void removeSpace(KeyEvent event) {
         if (event.getCode() == KeyCode.SPACE) {
-            input.clear();
-            input.setEditable(true);
+            getInput().clear();
+            getInput().setEditable(true);
             event.consume();
         }
     }
