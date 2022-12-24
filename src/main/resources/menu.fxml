@@ -28,7 +28,7 @@
             <Point3D />
          </rotationAxis>
       </Button>
-      <Button fx:id="multibutton" alignment="CENTER" mnemonicParsing="false" onMouseEntered="#handleButtonHover" onMouseExited="#handleButtonLeave" prefHeight="39.0" prefWidth="348.0" style="-fx-background-color: #e76f51;" text="MULTIPLAYER">
+      <Button fx:id="multibutton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToScene2" onMouseEntered="#handleButtonHover" onMouseExited="#handleButtonLeave" prefHeight="39.0" prefWidth="348.0" style="-fx-background-color: #e76f51;" text="MULTIPLAYER">
          <VBox.margin>
             <Insets top="20.0" />
          </VBox.margin>
@@ -36,7 +36,7 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Button>
-      <Button fx:id="settingsbutton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToScene2" onMouseEntered="#handleButtonHover" onMouseExited="#handleButtonLeave" prefHeight="39.0" prefWidth="348.0" style="-fx-background-color: #95d5b2;" text="SETTINGS">
+      <Button fx:id="settingsbutton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToScene3" onMouseEntered="#handleButtonHover" onMouseExited="#handleButtonLeave" prefHeight="39.0" prefWidth="348.0" style="-fx-background-color: #95d5b2;" text="SETTINGS">
          <VBox.margin>
             <Insets top="20.0" />
          </VBox.margin>

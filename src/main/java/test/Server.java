@@ -22,6 +22,7 @@ public class Server {
         PrintWriter pr = new PrintWriter(s.getOutputStream());
         pr.println("yes");
         pr.flush();
+        ss.close();
     }
 
 }

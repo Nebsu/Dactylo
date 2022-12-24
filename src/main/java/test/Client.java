@@ -19,6 +19,7 @@ public class Client {
         BufferedReader bf = new BufferedReader(in);
         String str = bf.readLine();
         System.out.println("server : " + str);
+        s.close();
     }
 
 }

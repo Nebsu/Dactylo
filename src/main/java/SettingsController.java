@@ -38,6 +38,7 @@ public class SettingsController {
             GameSettings.setWords_max_length(selectedOption2);
         });
     }
+
     public void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -46,4 +47,5 @@ public class SettingsController {
         stage.setScene(scene);
         stage.show();
     }
+    
 }
