@@ -2,10 +2,12 @@ package client;
 
 public class Connection {
 	
-	public int id;
+	private int id;
 	
 	public Connection(int id) {
 		this.id = id;
 	}
+
+	public int getId() {return this.id;}
 
 }

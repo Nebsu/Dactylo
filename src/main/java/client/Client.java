@@ -9,15 +9,13 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class Client implements Runnable{
-	
+public class Client implements Runnable {
+
 	private String host;
 	private int port;
-	
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	
 	private boolean running = false;
 	private EventListener listener;
 	
@@ -33,9 +31,9 @@ public class Client implements Runnable{
 			in = new ObjectInputStream(socket.getInputStream());
 			listener = new EventListener();
 			new Thread(this).start();
-		}catch(ConnectException e) {
+		} catch (ConnectException e) {
 			System.out.println("Unable to connect to the server");
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -48,7 +46,7 @@ public class Client implements Runnable{
 			in.close();
 			out.close();
 			socket.close();
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -56,7 +54,7 @@ public class Client implements Runnable{
 	public void sendObject(Object packet) {
 		try {
 			out.writeObject(packet);
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -65,18 +63,17 @@ public class Client implements Runnable{
 	public void run() {
 		try {
 			running = true;
-			
-			while(running) {
+			while (running) {
 				try {
 					Object data = in.readObject();
 					listener.received(data);
-				}catch(ClassNotFoundException e) {
+				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
-				}catch(SocketException e) {
+				} catch (SocketException e) {
 					close();
 				}
 			}
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
