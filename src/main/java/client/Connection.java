@@ -1,4 +1,4 @@
-package client.main;
+package client;
 
 public class Connection {
 	

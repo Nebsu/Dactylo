@@ -1,6 +1,6 @@
-package client.main;
+package client;
 
-import client.packets.*;
+import packets.RemoveConnectionPacket;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

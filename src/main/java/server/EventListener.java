@@ -1,7 +1,7 @@
-package server.main;
+package server;
 
-import server.packets.AddConnectionPacket;
-import server.packets.RemoveConnectionPacket;
+import packets.AddConnectionPacket;
+import packets.RemoveConnectionPacket;
 
 public class EventListener {
 	

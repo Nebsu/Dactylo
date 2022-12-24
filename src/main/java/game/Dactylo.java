@@ -1,5 +1,9 @@
 package game;
 
+import client.Client;
+import server.Server;
+import packets.*;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,5 +28,13 @@ public class Dactylo extends Application {
 
     public static void main(String[] args) {
         launch();
+        Server server = new Server(5000);
+		server.start();
+        
+        Client client = new Client("localhost",5000);
+		client.connect();
+		
+		AddConnectionPacket packet = new AddConnectionPacket();
+		client.sendObject(packet);
     }
 }
