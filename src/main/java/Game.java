@@ -49,6 +49,8 @@ public class Game {
         return text;
     }
 
+    public void setText(Label text) { this.text = text; }
+
     public int getHitcounter() {
         return hitcounter;
     }
@@ -121,8 +123,15 @@ public class Game {
         } else {
             stream = Stream.generate(() -> dictionary.get((int) (Math.random() * dictionary.size()))).filter(s -> s.toString().length() > 4).limit(GameSettings.getWords_max_length());
         }
-        stream.forEach(words::add);
-        text.setText(String.join(" ", words.toString().replaceAll("[\\[\\],]", "")));
+        //Add and write the words to the list if isBonus is true write in text the word in green else write it in red
+        stream.forEach(s -> {
+            words.add(s);
+            if (s.isBonus()) {
+                text.setText(text.getText() + s + " ");
+            } else {
+                text.setText(text.getText() + s + " ");
+            }
+        });
     }
 
     public void setNewDictionary(){
@@ -131,7 +140,7 @@ public class Game {
             BufferedReader in = new BufferedReader(new FileReader(GameSettings.getDifficulty()));
             String word;
             while ((word = in.readLine()) != null) {
-                dictionary.add(new Word(word, false));
+                dictionary.add(new Word(word));
             }
             in.close();
         } catch (IOException e) {

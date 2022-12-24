@@ -3,6 +3,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,6 +30,24 @@ public class Solo extends Game {
     private Label levellbl = new Label();
     @FXML
     private Label wordsLeft = new Label();
+    @FXML
+    private TextFlow textFlow = new TextFlow();
+
+    public void makeList(){
+        textFlow.getChildren().clear();
+        textFlow.setTextAlignment(TextAlignment.CENTER);;
+        for(Word word: getWords()) {
+            Text text = new Text(word.toString() + " ");
+            text.setTranslateY(7);
+            text.setFont(javafx.scene.text.Font.font("System", 20));
+            if (word.isBonus()){
+                text.setFill(Color.web("#95d5b2"));
+            }  else {
+                text.setFill(Color.web("#383734"));
+            }
+            textFlow.getChildren().add(text);
+        }
+    }
     public void initialize() {
         setTextFieldColor();
         setNewDictionary();
@@ -33,20 +55,21 @@ public class Solo extends Game {
         for (int i = 0; i < getWords().size()/2; i++) {
             getWords().remove(i);
         }
+        //remakeList
+        makeList();
         wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
-        getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
         wordsLeft.setText("" + getWords().size());
         healthlbl.setText("" + health);
         getInput().textProperty().addListener((observable, oldValue, newValue) -> {
             if (!getWords().isEmpty()) {
                 if (newValue.length() <= getWords().get(0).toString().length()) {
                     if (!newValue.equals(getWords().get(0).toString().substring(0, newValue.length()))) {
-                        getInput().setStyle("-fx-text-fill: red;");
+                        getInput().setStyle("-fx-text-fill: #e83e3e;");
                     } else {
                         getInput().setStyle("-fx-text-fill: #383734;");
                     }
                 } else {
-                    getInput().setStyle("-fx-text-fill: red;");
+                    getInput().setStyle("-fx-text-fill: #e83e3e;");
                 }
             }
         });
@@ -69,7 +92,7 @@ public class Solo extends Game {
                     } else {
                         getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
                     }
-                    getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
+                    makeList();
                     wordsLeft.setText("" + getWords().size());
                 });
             }
@@ -90,7 +113,7 @@ public class Solo extends Game {
         for (int i = 0; i < getWords().size()/2; i++) {
             getWords().remove(i);
         }
-        getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
+        makeList();
         if(timer != null){
             timer.cancel();
         }
@@ -137,11 +160,14 @@ public class Solo extends Game {
                     reset();
                 }
             }
+            if (getWords().get(0).isBonus()) {
+                System.out.println("bonus");
+                health += 5;
+                healthlbl.setText("" + health);
+            }
             wordCount++;
             if (wordCount == Global.WORDS_TO_LEVEL_UP) {
                 wordCount = 0;
-                health += 10;
-                healthlbl.setText("" + health);
                 wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP));
                 level++;
                 levellbl.setText(""+level);
@@ -149,14 +175,13 @@ public class Solo extends Game {
                 if (getWords().size() < GameSettings.getWords_max_length()/2) {
                     getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
                 }
-                System.out.println(interval);
             }
             getWords().remove(0);
             wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
             wordsLeft.setText("" + getWords().size());
             getInput().setStyle("-fx-text-fill: #383734");
             //refresh the text
-            getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
+            makeList();
             getInput().clear();
             getInput().setEditable(false);
         }else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE){
