@@ -13,8 +13,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="600.0" minWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TrainingGame">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Solo">
    <children>
       <GridPane alignment="CENTER" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #252422;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -30,6 +31,16 @@
          <children>
             <VBox alignment="CENTER" prefHeight="370.0" prefWidth="603.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
+                  <Label alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="LEVEL" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="levellbl" alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="1" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                   <Label fx:id="timerlbl" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
@@ -43,16 +54,12 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </TextField>
-                  <Label fx:id="text" alignment="CENTER" contentDisplay="CENTER" prefHeight="72.0" prefWidth="1000.0" style="-fx-background-color: #e76f51;" textAlignment="CENTER" wrapText="true">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
+                  <TextFlow fx:id="textFlow" prefHeight="72.0" prefWidth="1000.0" style="-fx-background-color: #e76f51;" textAlignment="CENTER" />
                   <HBox alignment="CENTER" prefHeight="43.0" prefWidth="702.0">
                      <children>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="WPM" textAlignment="CENTER" textFill="WHITE">
+                              <Label alignment="CENTER" layoutX="2.0" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="HEALTH" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -61,7 +68,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="ACCURACY" textFill="WHITE">
+                              <Label alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="WORDS TILL NEXT LEVEL" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -70,7 +77,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="REGULARITY" textFill="WHITE">
+                              <Label alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="WORDS LEFT" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -83,7 +90,7 @@
                      <children>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="wpm" alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="0" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="healthlbl" alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="100" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -92,7 +99,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="accuracy" alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="0" textFill="WHITE">
+                              <Label fx:id="wordCountlbl" alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -101,7 +108,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="regularity" alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="0" textFill="WHITE">
+                              <Label fx:id="wordsLeft" alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="0" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -109,6 +116,9 @@
                            </children>
                         </Pane>
                      </children>
+                     <padding>
+                        <Insets bottom="130.0" />
+                     </padding>
                   </HBox>
                </children>
             </VBox>
@@ -116,7 +126,7 @@
                <children>
                   <HBox layoutX="2.0" layoutY="9.0" prefHeight="112.0" prefWidth="99.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#back" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="BACK">
+                        <Button mnemonicParsing="false" onAction="#back" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="BACK">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -124,7 +134,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#changeGame" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="SOLO">
+                        <Button mnemonicParsing="false" onAction="#changeGame" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="TRAIN">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -138,7 +148,7 @@
             </Pane>
             <HBox alignment="CENTER" prefHeight="0.0" prefWidth="563.0" GridPane.columnIndex="1">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="53.0" prefWidth="694.0" text="TRAINING MODE" textAlignment="CENTER" textFill="#ebebeb">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="53.0" prefWidth="694.0" text="SOLO MODE" textAlignment="CENTER" textFill="#ebebeb">
                      <font>
                         <Font size="36.0" />
                      </font>

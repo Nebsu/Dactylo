@@ -1,5 +1,3 @@
-package game;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +16,7 @@ public class MenuController {
     @FXML
     private Button multibutton;
     @FXML
-    private Button helpbutton;
+    private Button settingsbutton;
     @FXML
     private Button quitbutton;
     @FXML
@@ -35,8 +33,8 @@ public class MenuController {
             solobutton.setStyle("-fx-background-color: #b7e4c7");
         } else if (event.getSource() == multibutton) {
             multibutton.setStyle("-fx-background-color: #ee964b");
-        } else if (event.getSource() == helpbutton) {
-            helpbutton.setStyle("-fx-background-color: #b7e4c7");
+        } else if (event.getSource() == settingsbutton) {
+            settingsbutton.setStyle("-fx-background-color: #b7e4c7");
         } else if (event.getSource() == quitbutton) {
             quitbutton.setStyle("-fx-background-color: #ee964b");
         }
@@ -48,8 +46,8 @@ public class MenuController {
             solobutton.setStyle("-fx-background-color:  #95d5b2");
         } else if (event.getSource() == multibutton) {
             multibutton.setStyle("-fx-background-color:  #e76f51");
-        } else if (event.getSource() == helpbutton) {
-            helpbutton.setStyle("-fx-background-color:  #95d5b2");
+        } else if (event.getSource() == settingsbutton) {
+            settingsbutton.setStyle("-fx-background-color:  #95d5b2");
         } else if (event.getSource() == quitbutton) {
             quitbutton.setStyle("-fx-background-color:  #e76f51");
         }
@@ -58,8 +56,17 @@ public class MenuController {
     public void switchToScene1(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("game.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root, 900, 600);
-        stage.setTitle("Game");
+        scene = new Scene(root);
+        stage.setTitle(Global.GAME_TITLE);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void switchToScene2(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("settings.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setTitle(Global.GAME_TITLE);
         stage.setScene(scene);
         stage.show();
     }
