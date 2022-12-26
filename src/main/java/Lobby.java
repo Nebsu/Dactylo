@@ -1,6 +1,3 @@
-import packets.AddConnectionPacket;
-import server.Server;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +27,7 @@ public class Lobby {
 
     @FXML
     public void initialize() {
-        Global.CLIENT.connect();
+        // Global.CLIENT.connect();
     }
 
     public void show_names() {
@@ -38,7 +35,7 @@ public class Lobby {
         BackgroundFill background_fill = new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
         players_list.setBackground(background);
-        players_list.setText(Server.players_to_string());
+        // players_list.setText(Server.players_to_string());
     }
 
     public void start_multi() {

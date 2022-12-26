@@ -22,7 +22,6 @@ public class Dactylo extends Application {
     }
 
     public static void main(String[] args) {
-		Global.SERVER.start();
         launch();
     }
 }
