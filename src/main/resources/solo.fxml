@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Solo">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Solo">
    <children>
       <GridPane alignment="CENTER" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #252422;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -155,6 +155,15 @@
                   </Label>
                </children>
             </HBox>
+            <Pane prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="2">
+               <children>
+                  <Button fx:id="savebtn" layoutX="41.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveData" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="SAVE">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
          </children>
       </GridPane>
    </children>

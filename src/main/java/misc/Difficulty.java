@@ -1,3 +1,5 @@
+package misc;
+
 public enum Difficulty {
     EASY("src/main/dictionary/easy.txt"),
     MEDIUM("src/main/dictionary/medium.txt"),
