@@ -7,14 +7,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server {
+public class Server implements Runnable {
     
     public static final String SERVER_IP = "192.168.1.19"; 
     // public static final String SERVER_IP = "192.168.1.36"; // IP PC FIXE 
     public static final int SERVER_PORT = 4999;
     private static final Server SERVER = initServer(SERVER_PORT);
     private final ServerSocket ss;
-    private final List<Client> playersConnected = new ArrayList<>();
+    private static volatile List<Client> playersConnected = new ArrayList<>();
     private static int count = 1;
     private boolean running = false;
 
@@ -30,20 +30,25 @@ public class Server {
         }
     }
 
-    private void start() {
-        this.running = true;
-        System.out.println("Server has started on port : " + SERVER_PORT);
-        System.out.println("Server IPV4 Adress : " + SERVER_IP);
-        while (running) {
-            try {
-                Socket s = ss.accept();
-                Client cl = connectClient(s);
-                this.receiveMessageFromClient(cl);
-                this.sendMessageToClient(cl, "Hi ! Welcome to my server");
-                this.print_clients();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Oh that's bad ...");
+    @Override
+    public synchronized void run() {
+        synchronized (this) {
+            this.running = true;
+            System.out.println("Server has started on port : " + SERVER_PORT);
+            System.out.println("Server IPV4 Adress : " + SERVER_IP);
+            while (running) {
+                try {
+                    Socket s = ss.accept();
+                    Client cl = connectClient(s);
+                    // Thread.currentThread().notifyAll();
+                    this.receiveMessageFromClient(cl);
+                    this.sendMessageToClient(cl, "Hi ! Welcome to my server");
+                    // System.out.println();
+                    // this.print_clients();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Oh that's bad ...");
+                }
             }
         }
     }
@@ -52,7 +57,7 @@ public class Server {
         System.exit(0);
     }
 
-    private Client connectClient(Socket s) {
+    private synchronized Client connectClient(Socket s) {
         Client newClient = new Client(s);
         newClient.setId(count++);
         playersConnected.add(newClient);
@@ -61,7 +66,7 @@ public class Server {
     }
 
     private void receiveMessageFromClient(Client c) throws IOException {
-        if (!this.playersConnected.contains(c)) throw new IllegalArgumentException("Client not found");
+        if (!playersConnected.contains(c)) throw new IllegalArgumentException("Client not found");
         InputStreamReader in = new InputStreamReader(c.getSocket().getInputStream());
         BufferedReader bf = new BufferedReader(in);
         String str = bf.readLine();
@@ -74,6 +79,11 @@ public class Server {
         pr.flush();
     }
 
+    public static synchronized Client getClient() {
+        System.out.println(playersConnected.get(count - 2));
+        return playersConnected.get(count - 2);
+    }
+
     private void print_clients() {
         for (Client c : playersConnected) {
             System.out.println(c.toString());
@@ -81,8 +91,8 @@ public class Server {
         System.out.println();
     }
     
-    public static void main(String[] args) {
-        SERVER.start();
+    public static synchronized void main(String[] args) {
+        new Thread(SERVER).start();
     }
 
 }

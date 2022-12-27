@@ -19,7 +19,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client " + this.id;
+        return "Player " + this.id;
     }
 
     private void sendMessageToServer(String message) throws IOException {

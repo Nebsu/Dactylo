@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lobby">
    <children>
@@ -20,29 +19,73 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="400.8" minHeight="0.0" prefHeight="41.19999694824219" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="469.0" minHeight="0.0" prefHeight="431.2" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="515.2" minHeight="10.0" prefHeight="128.79999999999995" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="469.0" minHeight="0.0" prefHeight="449.40001220703124" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="515.2" minHeight="10.0" prefHeight="109.39998779296877" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Pane GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Pane prefHeight="0.0" prefWidth="300.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="start" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="40.0" mnemonicParsing="false" onAction="#start_multi" prefHeight="66.0" prefWidth="220.0" style="-fx-background-color: #95d5b2;" text="START">
+                  <Button fx:id="start" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="40.0" mnemonicParsing="false" onAction="#start_multi" prefHeight="98.0" prefWidth="222.0" style="-fx-background-color: #95d5b2;" text="START">
                      <font>
                         <Font size="50.0" />
                      </font>
                   </Button>
                </children>
             </Pane>
-            <Pane GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Pane prefHeight="446.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <TextArea fx:id="players_list" editable="false" prefHeight="431.0" prefWidth="300.0">
+                  <Label fx:id="player1" contentDisplay="TOP" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="30.0" />
                      </font>
-                  </TextArea>
+                  </Label>
+                  <Label fx:id="player2" contentDisplay="TOP" layoutY="45.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player3" contentDisplay="TOP" layoutY="90.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player4" contentDisplay="TOP" layoutY="135.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player5" contentDisplay="TOP" layoutY="180.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player6" contentDisplay="TOP" layoutY="225.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player7" contentDisplay="TOP" layoutY="270.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player8" contentDisplay="TOP" layoutY="315.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player9" contentDisplay="TOP" layoutY="360.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="player10" contentDisplay="TOP" layoutY="405.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
-            <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#back" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="BACK">
