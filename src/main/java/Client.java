@@ -6,47 +6,22 @@ import java.net.Socket;
 
 public class Client {
 
-    private Socket socket;
-    private int id;
-    
-    public Client(Socket socket) {
-        this.socket = socket;
-    } 
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
+        ServerConnection connection = new ServerConnection(socket);
+        new Thread(connection).start();
 
-    public Socket getSocket() {return this.socket;}
-    public int getId() {return this.id;}
-    public void setId(int id) {this.id = id;}
+        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-    @Override
-    public String toString() {
-        return "Player " + this.id;
-    }
-
-    private void sendMessageToServer(String message) throws IOException {
-        PrintWriter pr = new PrintWriter(socket.getOutputStream());
-        pr.println(message);
-        pr.flush();
-    }
-
-    private void receiveMessageFromServer() throws IOException {
-        InputStreamReader in = new InputStreamReader(socket.getInputStream());
-        BufferedReader bf = new BufferedReader(in);
-        String str = bf.readLine();
-        System.out.println("Server : " + str);
-    }
-
-    public static void main(String[] args) {
-        try {
-            Socket s = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
-            Client c = new Client(s);
-            c.sendMessageToServer("Hello !");
-            c.receiveMessageFromServer();
-            s.close();
-            // Server.close();
-        } catch (IOException io) {
-            io.printStackTrace();
-            System.out.println("Oh no ...");
+        while (true) {
+            System.out.print("> ");
+            String command = keyboard.readLine();
+            if (command.equals("exit")) break;
+            out.println(command);
         }
+        socket.close();
+        System.exit(0);
     }
 
 }

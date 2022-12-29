@@ -32,26 +32,22 @@ public class Lobby {
     private Label player10;
 
     @FXML
-    public synchronized void initialize() {
+    public void initialize() {
         try {
             Socket s = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
-            Thread.sleep(5000);
-            Client c = Server.getClient();
-            System.out.println(c);
-            this.displayPlayer(c);
+            // Client c = Server.getClient();
+            // System.out.println(c);
+            // this.displayPlayer(c);
         } catch (IOException io) {
             io.printStackTrace();
             System.out.println("Oh no ...");
         } catch (IllegalStateException e) {
             e.printStackTrace();
             System.out.println("displayPlayer() Error");
-        } catch (InterruptedException inter) {
-            inter.printStackTrace();
-            System.out.println("Wait Error");
         }
     }
 
-    public synchronized void displayPlayer(Client c) {
+    public void displayPlayer(ClientHandler c) {
         switch (c.getId()) {
             case 1: paintPlayer(c, player1);
             case 2: paintPlayer(c, player2);
@@ -67,10 +63,10 @@ public class Lobby {
         throw new IllegalStateException("At least 2 players and maximum 10 players");
     }
 
-    public synchronized void paintPlayer(Client c, Label l) {
+    public void paintPlayer(ClientHandler cl, Label l) {
         l.setStyle("-fx-text-fill: #FFFFFF");
         l.setTextAlignment(TextAlignment.CENTER);
-        l.setText(c.toString());
+        l.setText(cl.toString());
     }
 
     public void start_multi() {
