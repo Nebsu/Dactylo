@@ -4,6 +4,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+
 public class Client {
 
     public static void main(String[] args) throws IOException {
@@ -14,12 +17,10 @@ public class Client {
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-        while (true) {
-            System.out.print("> ");
-            String command = keyboard.readLine();
-            if (command.equals("exit")) break;
-            out.println(command);
-        }
+        Gson gson = new Gson();
+        Boolean b = true;
+        String s = gson.toJson(b);
+        out.println(s);
         socket.close();
         System.exit(0);
     }

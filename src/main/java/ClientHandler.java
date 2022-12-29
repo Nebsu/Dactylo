@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+
 public class ClientHandler implements Runnable {
 
     private Socket socket;
@@ -27,15 +30,20 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
+            Gson gson = new Gson();
             while (true) {
                 String request = in.readLine();
-                if (request.contains("name")) out.println("Jeff");
-                else if (request.startsWith("say")) {
-                    int firstSpace = request.indexOf(" ");
-                    if (firstSpace != -1) {
-                        outToAll(request.substring(firstSpace + 1));
-                    }
-                } else out.println("Type 'tell me a name' to get a name");
+                if (request == null) continue;
+                // LinkedTreeMap<String, Boolean> map = gson.fromJson(request, LinkedTreeMap.class);
+                Boolean b = gson.fromJson(request, Boolean.class);
+                System.out.println(b);
+                // if (request.contains("name")) out.println("Jeff");
+                // else if (request.startsWith("say")) {
+                //     int firstSpace = request.indexOf(" ");
+                //     if (firstSpace != -1) {
+                //         outToAll(request.substring(firstSpace + 1));
+                //     }
+                // } else out.println("Type 'tell me a name' to get a name");
             }
         } catch (IOException e) {
             System.err.println("IO Exception Client Handler");

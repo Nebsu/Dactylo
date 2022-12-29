@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.Socket;
 
+import com.google.gson.Gson;
+
 public class Lobby {
     
     @FXML
@@ -35,9 +37,9 @@ public class Lobby {
     public void initialize() {
         try {
             Socket s = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
-            // Client c = Server.getClient();
-            // System.out.println(c);
-            // this.displayPlayer(c);
+            Socket socket = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
+            ServerConnection connection = new ServerConnection(socket);
+            new Thread(connection).start();
         } catch (IOException io) {
             io.printStackTrace();
             System.out.println("Oh no ...");
@@ -71,6 +73,9 @@ public class Lobby {
 
     public void start_multi() {
         System.out.println("start");
+        Gson gson = new Gson();
+        Boolean b = true;
+        String json = gson.toJson(b);
     }
 
     public void back(ActionEvent event) throws IOException {

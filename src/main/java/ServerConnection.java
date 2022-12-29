@@ -3,6 +3,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 
 public class ServerConnection implements Runnable {
 
@@ -20,10 +23,19 @@ public class ServerConnection implements Runnable {
     @Override
     public void run() {
         try {
+            String response;
             while (true) {
-                String response = in.readLine();
+                response = in.readLine();
                 if (response == null) break;
                 System.out.println("[SERVER] " + response);
+            }
+        } catch (SocketException e) {
+            try {
+                System.out.println("[SERVER] Client " + id + " disconnected");
+                this.socket.close();
+                Thread.interrupted();
+            } catch (IOException io) {
+
             }
         } catch (IOException e) {
             e.printStackTrace();
