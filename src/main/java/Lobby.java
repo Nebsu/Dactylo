@@ -4,81 +4,61 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
-
+import java.net.SocketException;
+import java.util.List;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 
 public class Lobby {
     
-    @FXML
-    private Stage stage;
-    private Scene scene;
-    @FXML
-    private Button start;
-    @FXML
-    private Label player1;
-    private Label player2;
-    private Label player3;
-    private Label player4;
-    private Label player5;
-    private Label player6;
-    private Label player7;
-    private Label player8;
-    private Label player9;
-    private Label player10;
+    @FXML private Stage stage;
+    @FXML private Scene scene;
+    @FXML private Button start;
+    @FXML private VBox vbox;
+
+    private ServerConnection connection;
+
+    public VBox getVbox() {return vbox;}
 
     @FXML
     public void initialize() {
         try {
-            Socket s = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
             Socket socket = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
-            ServerConnection connection = new ServerConnection(socket);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            this.connection = new ServerConnection(socket, this);
             new Thread(connection).start();
+            LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+            Gson gson = new Gson();
+            map.put("message", "Connection");
+            map.put("pseudo", "Player #");
+            String message = gson.toJson(map);
+            out.println(message);
+        } catch (SocketException se) {
+            System.out.println("[CLIENT] Client disconnected");
+            Thread.interrupted();
         } catch (IOException io) {
             io.printStackTrace();
-            System.out.println("Oh no ...");
+            System.err.println("Lobby IOException");
         } catch (IllegalStateException e) {
             e.printStackTrace();
-            System.out.println("displayPlayer() Error");
+            System.err.println("displayPlayer() Error");
         }
-    }
-
-    public void displayPlayer(ClientHandler c) {
-        switch (c.getId()) {
-            case 1: paintPlayer(c, player1);
-            case 2: paintPlayer(c, player2);
-            case 3: paintPlayer(c, player3);
-            case 4: paintPlayer(c, player4);
-            case 5: paintPlayer(c, player5);
-            case 6: paintPlayer(c, player6);
-            case 7: paintPlayer(c, player7);
-            case 8: paintPlayer(c, player8);
-            case 9: paintPlayer(c, player9);
-            case 10: paintPlayer(c, player10);
-        }
-        throw new IllegalStateException("At least 2 players and maximum 10 players");
-    }
-
-    public void paintPlayer(ClientHandler cl, Label l) {
-        l.setStyle("-fx-text-fill: #FFFFFF");
-        l.setTextAlignment(TextAlignment.CENTER);
-        l.setText(cl.toString());
     }
 
     public void start_multi() {
+        // isReady = true;
         System.out.println("start");
-        Gson gson = new Gson();
-        Boolean b = true;
-        String json = gson.toJson(b);
     }
 
     public void back(ActionEvent event) throws IOException {
+        // mode_multi = false;
         Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);

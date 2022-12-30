@@ -24,7 +24,7 @@ tasks.withType(JavaCompile) {
 }
 
 // faire une task qui lance le serveur
-task runServer(type: JavaExec) {
+task server(type: JavaExec) {
     main = 'Server'
     classpath = sourceSets.main.runtimeClasspath
 }
