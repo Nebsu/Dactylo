@@ -11,4 +11,6 @@ public class Global {
 
 
     public static final String FILE_PATH = "src/main/save/data.txt";
+    public static final String LEADERBOARD_FILE_PATH = "src/main/save/leaderboard.txt";
+
 }

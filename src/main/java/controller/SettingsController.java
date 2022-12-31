@@ -1,5 +1,7 @@
-package Controller;
+package controller;
 
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import misc.GameSettings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,9 +26,16 @@ public class SettingsController {
     private ChoiceBox<String> choiceBox = new ChoiceBox<>();
     @FXML
     private ChoiceBox<Integer> choiceBox2 = new ChoiceBox<>();
+    @FXML
+    private TextField usernameTa;
 
     @FXML
     public void initialize() {
+        usernameTa.setText(GameSettings.getUsername());
+        usernameTa.textProperty().addListener((observable, oldValue, newValue) -> {
+            GameSettings.setUsername(newValue);
+            usernameTa.setText(newValue);
+        });
         choiceBox.getItems().addAll("Easy", "Medium", "Hard");
         choiceBox.setValue(GameSettings.getDifficultyName());
         choiceBox.setOnAction(event -> {
@@ -44,6 +53,15 @@ public class SettingsController {
     }
     public void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setTitle(Global.GAME_TITLE);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void switchToLeaderboard(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("../leaderboard.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setTitle(Global.GAME_TITLE);

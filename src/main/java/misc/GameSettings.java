@@ -4,6 +4,7 @@ public class GameSettings {
     private static String difficulty = String.valueOf(Difficulty.EASY.getPath());
     private static String difficultyName = "Easy";
     private static int words_max_length = 15;
+    private static String username = "Player";
 
     private GameSettings() {}
 
@@ -35,5 +36,21 @@ public class GameSettings {
 
     public static void setDifficultyName(String difficultyName) {
         GameSettings.difficultyName = difficultyName;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        GameSettings.username = username;
+    }
+
+    public static int getMaxWords() {
+        return words_max_length;
+    }
+
+    public static void setMaxWords(int parseInt) {
+        GameSettings.words_max_length = parseInt;
     }
 }
