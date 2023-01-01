@@ -2,12 +2,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import misc.Global;
 
 import java.io.IOException;
 
+import misc.Global;
 
 public class Dactylo extends Application {
+    
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Dactylo.class.getResource("menu.fxml"));
@@ -25,4 +26,5 @@ public class Dactylo extends Application {
     public static void main(String[] args) {
         launch();
     }
+    
 }

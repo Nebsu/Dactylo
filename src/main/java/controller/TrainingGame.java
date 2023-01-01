@@ -20,8 +20,8 @@ import java.util.TimerTask;
 
 import misc.*;
 
-
 public class TrainingGame extends Game {
+
     //number of times the user has hit the space bar = number of words typed
     private int hitcounter = 0;
     private int errorcounter = 0;
@@ -133,7 +133,6 @@ public class TrainingGame extends Game {
         getInput().setEditable(true);
     }
 
-
     // when space is pressed, check if the word is in the list
     public void checkWord(KeyEvent event) {
         if (getGamestate() == false) {
@@ -159,6 +158,7 @@ public class TrainingGame extends Game {
             inputcounter++;
         }
     }
+
     public void removeSpace(KeyEvent event) {
         if (event.getCode() == KeyCode.SPACE) {
             getInput().clear();
@@ -166,4 +166,5 @@ public class TrainingGame extends Game {
             event.consume();
         }
     }
+
 }

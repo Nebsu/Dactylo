@@ -3,6 +3,7 @@ package misc;
 import java.util.Random;
 
 public class Word {
+    
     private String word;
     private char type;
 
@@ -32,7 +33,9 @@ public class Word {
             return 'n';
         }
     }
+
     public char getType() {
         return type;
     }
+
 }

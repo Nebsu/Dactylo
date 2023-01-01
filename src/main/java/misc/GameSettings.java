@@ -1,6 +1,7 @@
 package misc;
 
 public class GameSettings {
+
     private static String difficulty = String.valueOf(Difficulty.EASY.getPath());
     private static String difficultyName = "Easy";
     private static int words_max_length = 15;
@@ -53,4 +54,5 @@ public class GameSettings {
     public static void setMaxWords(int parseInt) {
         GameSettings.words_max_length = parseInt;
     }
+    
 }

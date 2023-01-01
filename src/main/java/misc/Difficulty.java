@@ -1,6 +1,7 @@
 package misc;
 
 public enum Difficulty {
+    
     EASY("src/main/dictionary/easy.txt"),
     MEDIUM("src/main/dictionary/medium.txt"),
     HARD("src/main/dictionary/hard.txt");
@@ -14,4 +15,5 @@ public enum Difficulty {
     public String getPath() {
         return path;
     }
+
 }

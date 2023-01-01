@@ -14,9 +14,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import misc.GameSettings;
-import misc.Global;
-import misc.Word;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -24,7 +21,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import misc.GameSettings;
+import misc.Global;
+import misc.Word;
+
 public class Game {
+    
     private boolean gamestate = false;
     private ArrayList<Word> dictionary = new ArrayList<>();
     private ArrayList <Word> words = new ArrayList<>();
@@ -64,6 +66,7 @@ public class Game {
         Background background = new Background(background_fill);
         getInput().setBackground(background);
     }
+
     public void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -109,4 +112,5 @@ public class Game {
             e.printStackTrace();
         }
     }
+
 }

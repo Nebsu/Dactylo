@@ -9,9 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
-import misc.GameSettings;
-import misc.Global;
-import misc.Word;
 
 import java.io.*;
 import java.util.Random;
@@ -19,8 +16,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static misc.Global.*;
+import misc.GameSettings;
+import misc.Global;
+import misc.Word;
 
 public class Solo extends Game {
+
     private Timer timer;
     private int health = DEFAULT_HEALTH;
     private int wordCount = DEFAULT_WORD_COUNT;
@@ -39,7 +40,7 @@ public class Solo extends Game {
     @FXML
     private TextFlow textFlow = new TextFlow();
 
-    //Display the words with the right color
+    // Display the words with the right color
     public void displayList(){
         textFlow.getChildren().clear();
         textFlow.setTextAlignment(TextAlignment.CENTER);;
@@ -55,7 +56,8 @@ public class Solo extends Game {
             textFlow.getChildren().add(text);
         }
     }
-    //Saves the game
+
+    // Saves the game
     public void saveData() {
         try {
             File file = new File(FILE_PATH);
@@ -89,7 +91,7 @@ public class Solo extends Game {
         }
     }
 
-    //Read data from file and sets variables accordingly
+    // Read data from file and sets variables accordingly
     public void loadData() {
         try {
             File file = new File(FILE_PATH);
@@ -142,7 +144,8 @@ public class Solo extends Game {
             e.printStackTrace();
         }
     }
-    //Clear the file and put the default content
+
+    // Clear the file and put the default content
     public void clearFile() {
         try {
             File file = new File(FILE_PATH);
@@ -158,7 +161,7 @@ public class Solo extends Game {
         }
     }
 
-    //Count the number of lines in the file
+    // Count the number of lines in the file
     public int getLineCount() {
         int lineCount = 1;
         try {
@@ -177,7 +180,8 @@ public class Solo extends Game {
         }
         return lineCount;
     }
-    //Add the score to the leaderboard
+
+    // Add the score to the leaderboard
     public void addLeaderboard(){
         try {
             File file = new File(LEADERBOARD_FILE_PATH);
@@ -192,7 +196,8 @@ public class Solo extends Game {
             e.printStackTrace();
         }
     }
-    //Set the game, loads data and displays it, input listener
+
+    // Set the game, loads data and displays it, input listener
     public void initialize() {
         setTextFieldColor();
         setNewDictionary();
@@ -219,7 +224,7 @@ public class Solo extends Game {
         });
     }
 
-    //Start the game loop
+    // Start the game loop
     public void timerStart(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -244,7 +249,7 @@ public class Solo extends Game {
         }, 0, (int)interval*1000);
     }
 
-    //Reset the game
+    // Reset the game
     public void reset(){
         addLeaderboard();
         clearFile();
@@ -268,7 +273,7 @@ public class Solo extends Game {
         }
     }
 
-    //Return number of difference between two words with different length
+    // Return number of difference between two words with different length
     public int compareWords(String word1, String word2){
         int difference = 0;
         if(word1.length() > word2.length()){
@@ -288,7 +293,8 @@ public class Solo extends Game {
         }
         return difference;
     }
-    //Do the action when the user presses space
+
+    // Do the action when the user presses space
     public void checkWord(KeyEvent event) {
         if (getGamestate() == false) {
             setGamestate(true);
@@ -337,7 +343,8 @@ public class Solo extends Game {
             getInput().setEditable(false);
         }
     }
-    //Remove the space after confirming the word
+
+    // Remove the space after confirming the word
     public void removeSpace(KeyEvent event) {
         if (event.getCode() == KeyCode.SPACE) {
             getInput().clear();
@@ -345,4 +352,5 @@ public class Solo extends Game {
             event.consume();
         }
     }
+
 }

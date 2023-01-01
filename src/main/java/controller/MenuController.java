@@ -9,11 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import misc.Global;
 
 import java.io.IOException;
 
+import misc.Global;
+
 public class MenuController {
+
     @FXML
     private Button solobutton;
     @FXML
@@ -30,6 +32,7 @@ public class MenuController {
     public void click(){
         System.exit(0);
     }
+
     @FXML
     public void handleButtonHover(MouseEvent event){
         if(event.getSource() == solobutton) {
@@ -56,6 +59,7 @@ public class MenuController {
         }
     }
 
+    // Solo game
     public void switchToScene1(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../game.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -65,7 +69,18 @@ public class MenuController {
         stage.show();
     }
 
+    // Multiplayer game
     public void switchToScene2(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("../lobby.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setTitle(Global.GAME_TITLE);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    // Settings
+    public void switchToScene3(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../settings.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -73,4 +88,5 @@ public class MenuController {
         stage.setScene(scene);
         stage.show();
     }
+
 }

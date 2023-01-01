@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import misc.GameSettings;
 import javafx.event.ActionEvent;
@@ -11,9 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
-import misc.Global;
 
 import java.io.IOException;
+
+import misc.Global;
 
 public class SettingsController {
 
@@ -51,6 +51,7 @@ public class SettingsController {
             GameSettings.setWords_max_length(selectedOption2);
         });
     }
+
     public void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -68,4 +69,5 @@ public class SettingsController {
         stage.setScene(scene);
         stage.show();
     }
+    
 }

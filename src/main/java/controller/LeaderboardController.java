@@ -13,8 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import misc.Global;
-
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,8 +21,10 @@ import java.io.IOException;
 import java.util.Collections;
 
 import static misc.Global.*;
+import misc.Global;
 
 public class LeaderboardController {
+
     @FXML
     private TableView<LeaderboardData> list;
     @FXML
@@ -77,8 +77,8 @@ public class LeaderboardController {
         stage.show();
     }
 
-
     class LeaderboardData {
+
         private String username;
         private int level;
         private int score;
@@ -121,5 +121,7 @@ public class LeaderboardController {
         public ObservableValue<String> scoreProperty() {
             return new SimpleStringProperty(String.valueOf(score));
         }
+
     }
+
 }
