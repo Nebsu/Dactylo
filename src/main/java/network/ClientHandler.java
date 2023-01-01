@@ -8,6 +8,8 @@ import java.net.SocketException;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
+@SuppressWarnings("unchecked")
+
 public class ClientHandler implements Runnable {
 
     private Socket socket;

@@ -13,6 +13,8 @@ import javafx.scene.text.Text;
 
 import controller.Lobby;
 
+@SuppressWarnings("unchecked")
+
 public class ServerConnection implements Runnable {
 
     private Socket socket;

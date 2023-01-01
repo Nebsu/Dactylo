@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Multi">
+   <children>
+      <GridPane alignment="CENTER" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #252422;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <VBox alignment="CENTER" prefHeight="370.0" prefWidth="603.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="LEVEL" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="levellbl" alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="1" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="timerlbl" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="input" alignment="CENTER" maxWidth="500.0" minWidth="500.0" onKeyPressed="#checkWord" onKeyReleased="#removeSpace" prefHeight="39.0" prefWidth="500.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </TextField>
+                  <TextFlow fx:id="textFlow" prefHeight="72.0" prefWidth="1000.0" style="-fx-background-color: #e76f51;" textAlignment="CENTER" />
+                  <HBox alignment="CENTER" prefHeight="43.0" prefWidth="702.0">
+                     <children>
+                        <Pane prefHeight="43.0" prefWidth="240.0">
+                           <children>
+                              <Label alignment="CENTER" layoutX="2.0" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="HEALTH" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="43.0" prefWidth="240.0">
+                           <children>
+                              <Label alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="WORDS TILL NEXT LEVEL" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="43.0" prefWidth="240.0">
+                           <children>
+                              <Label alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="WORDS LEFT" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="43.0" prefWidth="702.0">
+                     <children>
+                        <Pane prefHeight="43.0" prefWidth="240.0">
+                           <children>
+                              <Label fx:id="healthlbl" alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="100" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="43.0" prefWidth="240.0">
+                           <children>
+                              <Label fx:id="wordCountlbl" alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="43.0" prefWidth="240.0">
+                           <children>
+                              <Label fx:id="wordsLeft" alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="0" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                     </children>
+                     <padding>
+                        <Insets bottom="130.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <Pane prefHeight="0.0" prefWidth="0.0">
+               <children>
+                  <HBox layoutX="2.0" layoutY="9.0" prefHeight="112.0" prefWidth="99.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#back" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="BACK">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#changeGame" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="TRAIN">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+            <HBox alignment="CENTER" prefHeight="0.0" prefWidth="563.0" GridPane.columnIndex="1">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="53.0" prefWidth="694.0" text="SOLO MODE" textAlignment="CENTER" textFill="#ebebeb">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Pane prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="2">
+               <children>
+                  <Button fx:id="savebtn" layoutX="41.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveData" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="SAVE">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
