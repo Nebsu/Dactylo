@@ -20,7 +20,7 @@ public class ServerConnection implements Runnable {
     private Socket socket;
     private Lobby lobby;
     private BufferedReader in;
-    private List<String> playersList;
+    private List<String> playersNamesList;
     
     public ServerConnection(Socket socket, Lobby lobby) throws IOException {
         this.socket = socket;
@@ -28,7 +28,7 @@ public class ServerConnection implements Runnable {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public List<String> getPlayersList() {return playersList;}
+    public List<String> getPlayersNamesList() {return this.playersNamesList;}
 
     @Override
     public void run() {
@@ -38,9 +38,14 @@ public class ServerConnection implements Runnable {
                 Gson gson = new Gson();
                 LinkedTreeMap<String, Object> map = gson.fromJson(request, LinkedTreeMap.class);
                 String message = (String) map.get("message");
-                if (message.equals("playersList")) {
-                    this.playersList = (List<String>) map.get("list");
+                if (message.equals("PlayersList")) {
+                    this.playersNamesList = (List<String>) map.get("list");
                     this.drawNames();
+                } else if (message.equals("ReadyPlayers")) {
+                    this.playersNamesList = (List<String>) map.get("list");
+                    this.showReadyPlayers();
+                } else if (message.equals("Quit")) {
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -61,9 +66,15 @@ public class ServerConnection implements Runnable {
     private void drawNames() {
         Platform.runLater(() -> {
             lobby.getVbox().getChildren().clear();
-            for (String name : playersList) {
+            for (String name : playersNamesList) {
                 lobby.getVbox().getChildren().add(new Text(name));
             }
+        });
+    }
+
+    private void showReadyPlayers() {
+        Platform.runLater(() -> {
+
         });
     }
 

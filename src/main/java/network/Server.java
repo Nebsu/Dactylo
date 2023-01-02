@@ -20,7 +20,8 @@ public class Server implements Runnable {
     private final ServerSocket ss;
     private static List<ClientHandler> clients = new ArrayList<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(10);
-    private static List<String> playersList = new ArrayList<>();
+    private static List<Player> playersList = new ArrayList<>();
+    private static List<Player> readyPlayers = new ArrayList<>();
     private boolean running = false;
 
     private Server(int port) throws IOException {
@@ -35,11 +36,33 @@ public class Server implements Runnable {
         }
     }
 
-    public static void addPlayer(String name) {
-        playersList.add(name);
+    public static List<Player> getPlayersList() {return playersList;}
+    public static List<Player> getReadyPlayers() {return readyPlayers;}
+
+    public static void addPlayer(Player p) {
+        playersList.add(p);
     }
 
-    public static List<String> getPlayersList() {return playersList;}
+    public static void addReadyPlayer(Player p) {
+        readyPlayers.add(p);
+    }
+
+    public static void removePlayer(Player p) {
+        for (Player player : playersList) {
+            if (player.equals(p)) {
+                playersList.remove(player);
+                break;
+            }
+        }
+        if (p.isReady()) {
+            for (Player player : readyPlayers) {
+                if (player.equals(p)) {
+                    readyPlayers.remove(player);
+                    break;
+                }
+            }
+        }
+    }
 
     @Override
     public void run() {
@@ -62,10 +85,21 @@ public class Server implements Runnable {
         }
     }
 
-    public static void showToEveryone() throws IOException {
+    public static void showToEveryone(boolean ready) throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-        map.put("message", "playersList");
-        map.put("list", playersList);
+        List<String> names = new ArrayList<>();
+        if (!ready) {
+            map.put("message", "PlayersList");
+            for (Player p : playersList) {
+                names.add(p.getName() + "#" + p.getId());
+            }
+        } else {
+            map.put("message", "ReadyPlayers");
+            for (Player p : readyPlayers) {
+                names.add(p.getName() + "#" + p.getId());
+            }
+        }
+        map.put("list", names);
         Gson gson = new Gson();
         String s = gson.toJson(map);
         for (ClientHandler client : clients) {
@@ -80,6 +114,20 @@ public class Server implements Runnable {
             System.out.println("Client " + client.getId());
         }
         System.out.println();
+    }
+
+    public static void disconnect(ClientHandler cl) throws IOException {
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "Disconnect");
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        for (ClientHandler client : clients) {
+            if (cl == client) {
+                PrintWriter out = new PrintWriter(cl.getSocket().getOutputStream(), true);
+                out.println(s);
+                break;
+            }
+        }
     }
     
     public static void main(String[] args) {

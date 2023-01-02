@@ -17,6 +17,7 @@ import java.net.SocketException;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
+import static misc.Global.*;
 import misc.Global;
 import network.Server;
 import network.ServerConnection;
@@ -25,24 +26,30 @@ public class Lobby {
     
     @FXML private Stage stage;
     @FXML private Scene scene;
-    @FXML private Button start;
+    @FXML private Button ready;
     @FXML private VBox vbox;
 
+    private Socket socket;
+    private PrintWriter out;
     private ServerConnection connection;
+    private static boolean visited = false;
+
 
     public VBox getVbox() {return vbox;}
 
     @FXML
     public void initialize() {
         try {
-            Socket socket = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            if (visited) return;
+            visited = true;
+            this.socket = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
+            this.out = new PrintWriter(socket.getOutputStream(), true);
             this.connection = new ServerConnection(socket, this);
             new Thread(connection).start();
             LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
             Gson gson = new Gson();
             map.put("message", "Connection");
-            map.put("pseudo", "Player #");
+            map.put("pseudo", PLAYER.getName());
             String message = gson.toJson(map);
             out.println(message);
         } catch (SocketException se) {
@@ -51,20 +58,25 @@ public class Lobby {
         } catch (IOException io) {
             io.printStackTrace();
             System.err.println("Lobby IOException");
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            System.err.println("displayPlayer() Error");
         }
     }
 
-    public void start_multi() {
-        // isReady = true;
-        System.out.println("start");
+    public void ready_to_play() {
+        PLAYER.setReady(true);
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        Gson gson = new Gson();
+        map.put("message", "Ready");
+        map.put("pseudo", PLAYER.getName());
+        map.put("id", String.valueOf(PLAYER.getId()));
+        String message = gson.toJson(map);
+        out.println(message);
+        System.out.println("Ready to play");
     }
 
     public void back(ActionEvent event) throws IOException {
-        // mode_multi = false;
-        Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
+        if (PLAYER.isReady()) this.quitLobby();
+        PLAYER.setReady(false);
+        Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setTitle(Global.GAME_TITLE);
@@ -72,4 +84,22 @@ public class Lobby {
         stage.show();
     }
     
+    private void quitLobby() {
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        Gson gson = new Gson();
+        map.put("message", "Quit");
+        map.put("pseudo", PLAYER.getName());
+        map.put("id", String.valueOf(PLAYER.getId()));
+        String message = gson.toJson(map);
+        out.println(message);
+        System.out.println("You quit the online lobby");
+        try {
+            out.close();
+            socket.close();
+        } catch (IOException io) {
+            io.printStackTrace();
+            System.err.println("Lobby IOException");
+        }
+    }
+
 }
