@@ -4,13 +4,11 @@ public class Player {
 
     private final String name;
     private int id;
-    private int score;
     private boolean isReady;
 
     public Player(String name, int id) {
         this.name = name;
         this.id = id;
-        this.score = 0;
         this.isReady = false;
     }
     public Player(String name) {

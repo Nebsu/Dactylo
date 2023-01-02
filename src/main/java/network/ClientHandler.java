@@ -37,25 +37,23 @@ public class ClientHandler implements Runnable {
                 String message = (String) map.get("message");
                 if (message.equals("Connection")) {
                     String name = (String) map.get("pseudo");
-                    Player p = new Player(name, id);
+                    Player p = new Player(name, this.id);
                     Global.PLAYER.setId(id);
                     // System.out.println(p.getName());
                     Server.addPlayer(p);
                     Server.showToEveryone(false);
                 } else if (message.equals("Ready")) {
                     String name = (String) map.get("pseudo");
-                    String id = (String) map.get("id");
-                    int idInt = Integer.parseInt(id);
-                    Player p = new Player(name, idInt);
+                    Player p = new Player(name, this.id);
                     p.setReady(true);
-                    System.out.println("[SERVER] "+ Global.PLAYER + " is ready");
+                    System.out.println("[SERVER] Player"+ this.id + " is ready");
                     Server.addReadyPlayer(p);
                     Server.showToEveryone(true);
+                    if (Server.checkIfEveryoneIsReady())
+                        Server.startGame();
                 } else if (message.equals("Quit")) {
                     String name = (String) map.get("pseudo");
-                    String id = (String) map.get("id");
-                    int idInt = Integer.parseInt(id);
-                    Player p = new Player(name, idInt);
+                    Player p = new Player(name, this.id);
                     p.setReady(true);
                     Server.removePlayer(p);
                     Server.showToEveryone(false);

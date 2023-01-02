@@ -67,10 +67,18 @@ public class Lobby {
         Gson gson = new Gson();
         map.put("message", "Ready");
         map.put("pseudo", PLAYER.getName());
-        map.put("id", String.valueOf(PLAYER.getId()));
         String message = gson.toJson(map);
         out.println(message);
         System.out.println("Ready to play");
+    }
+
+    public void start_multi(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("../multi.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setTitle(Global.GAME_TITLE);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void back(ActionEvent event) throws IOException {
@@ -89,7 +97,6 @@ public class Lobby {
         Gson gson = new Gson();
         map.put("message", "Quit");
         map.put("pseudo", PLAYER.getName());
-        map.put("id", String.valueOf(PLAYER.getId()));
         String message = gson.toJson(map);
         out.println(message);
         System.out.println("You quit the online lobby");

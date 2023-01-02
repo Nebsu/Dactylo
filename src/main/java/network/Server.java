@@ -108,12 +108,18 @@ public class Server implements Runnable {
         }
     }
 
-    private void printClients() {
-        System.out.println("\n Print clients : ");
-        for (ClientHandler client : clients) {
-            System.out.println("Client " + client.getId());
+    public static boolean checkIfEveryoneIsReady() {
+        for (Player p : playersList) 
+            System.out.println(p);
+        for (Player p : readyPlayers) 
+            System.out.println(p);
+        int n = playersList.size();
+        if (n != readyPlayers.size()) return false;
+        int acc = 0;
+        for (int i = 0; i < n; i++) {
+            if (readyPlayers.contains(playersList.get(i))) acc++;
         }
-        System.out.println();
+        return acc == n;
     }
 
     public static void disconnect(ClientHandler cl) throws IOException {
@@ -128,6 +134,19 @@ public class Server implements Runnable {
                 break;
             }
         }
+    }
+
+    private void printClients() {
+        System.out.println("\n Print clients : ");
+        for (ClientHandler client : clients) {
+            System.out.println("Client " + client.getId());
+        }
+        System.out.println();
+    }
+
+    public static void startGame() {
+        // TODO
+        System.out.println("GAME START");
     }
     
     public static void main(String[] args) {
