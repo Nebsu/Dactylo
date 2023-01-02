@@ -28,12 +28,15 @@ public class Lobby {
     @FXML private Scene scene;
     @FXML private Button ready;
     @FXML private VBox vbox;
+    @FXML private Button start;
 
     private Socket socket;
     private PrintWriter out;
     private ServerConnection connection;
     private static boolean visited = false;
+    private static boolean lobbyMode = true;
 
+    public static void switchToMultiScene() {lobbyMode = false;}
 
     public VBox getVbox() {return vbox;}
 
@@ -70,6 +73,10 @@ public class Lobby {
         String message = gson.toJson(map);
         out.println(message);
         System.out.println("Ready to play");
+    }
+
+    public void showStart() {
+        start.setVisible(true);
     }
 
     public void start_multi(ActionEvent event) throws IOException {

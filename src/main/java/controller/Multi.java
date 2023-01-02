@@ -22,15 +22,12 @@ public class Multi extends Game {
 
     private int health = DEFAULT_HEALTH;
     private int wordCount = DEFAULT_WORD_COUNT;
-    private int level = DEFAULT_LEVEL;
     private int score = 0;
 
     @FXML
     private Label healthlbl = new Label();
     @FXML
     private Label wordCountlbl = new Label();
-    @FXML
-    private Label levellbl = new Label();
     @FXML
     private Label wordsLeft = new Label();
     @FXML
@@ -79,9 +76,8 @@ public class Multi extends Game {
             File file = new File(LEADERBOARD_FILE_PATH);
             FileWriter fileWriter = new FileWriter(file, true);
             BufferedWriter writer = new BufferedWriter(fileWriter);
-            writer.write(GameSettings.getUsername() + "-" + score + "-"+ level);
+            writer.write(GameSettings.getUsername() + "-" + score);
             writer.newLine();
-
             writer.close();
             fileWriter.close();
         } catch (IOException e) {
@@ -93,10 +89,11 @@ public class Multi extends Game {
     public void initialize() {
         setTextFieldColor();
         setNewDictionary();
+        remakeList();
+        displayList();
         wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
         wordsLeft.setText("" + getWords().size());
         healthlbl.setText("" + health);
-        levellbl.setText("" + level);
         getInput().textProperty().addListener((observable, oldValue, newValue) -> {
             if (!getWords().isEmpty()) {
                 if (newValue.length() <= getWords().get(0).toString().length()) {
@@ -112,24 +109,22 @@ public class Multi extends Game {
         });
     }
 
-    // Reset the game
-    public void reset(){
-        addLeaderboard();
-        score = 0;
-        health = DEFAULT_HEALTH;
-        healthlbl.setText("" + health);
-        wordCount = DEFAULT_WORD_COUNT;
-        wordCountlbl.setText("" + (WORDS_TO_LEVEL_UP - wordCount));
-        level = DEFAULT_LEVEL;
-        levellbl.setText("" + level);
-        setGamestate(false);
-        getInput().clear();
-        remakeList();
-        for (int i = 0; i < GameSettings.getWords_max_length()/2+1; i++) {
-            getWords().remove(i);
-        }
-        displayList();
-    }
+    // // Reset the game
+    // public void reset(){
+    //     addLeaderboard();
+    //     score = 0;
+    //     health = DEFAULT_HEALTH;
+    //     healthlbl.setText("" + health);
+    //     wordCount = DEFAULT_WORD_COUNT;
+    //     wordCountlbl.setText("" + (WORDS_TO_LEVEL_UP - wordCount));
+    //     setGamestate(false);
+    //     getInput().clear();
+    //     remakeList();
+    //     for (int i = 0; i < GameSettings.getWords_max_length()/2+1; i++) {
+    //         getWords().remove(i);
+    //     }
+    //     displayList();
+    // }
 
     // Return number of difference between two words with different length
     public int compareWords(String word1, String word2){
@@ -158,7 +153,7 @@ public class Multi extends Game {
             setGamestate(true);
         }
         if (event.getCode() == KeyCode.ESCAPE) {
-            reset();
+            // reset();
         }
         if (event.getCode() == KeyCode.SPACE && !getWords().isEmpty()) {
             String word = getInput().getText();
@@ -166,8 +161,8 @@ public class Multi extends Game {
                 health -= compareWords(getWords().get(0).toString(), word);
                 healthlbl.setText(""+health);
                 if (health <= 0) {
-                    getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
-                    reset();
+                    getText().setText("You typed " + wordCount + " words!");
+                    // reset();
                 }
             } else {
                 score += word.length();
@@ -180,8 +175,6 @@ public class Multi extends Game {
             if (wordCount == Global.WORDS_TO_LEVEL_UP) {
                 wordCount = 0;
                 wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP));
-                level++;
-                levellbl.setText(""+level);
             }
             getWords().remove(0);
             if (getWords().size() < GameSettings.getWords_max_length()/2) {

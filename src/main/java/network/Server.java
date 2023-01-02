@@ -77,7 +77,6 @@ public class Server implements Runnable {
                 clients.add(client);
                 System.out.println("[SERVER] Client " + client.getId() + " connected");
                 pool.execute(client);
-                printClients();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("IO Exception Server");
@@ -109,10 +108,6 @@ public class Server implements Runnable {
     }
 
     public static boolean checkIfEveryoneIsReady() {
-        for (Player p : playersList) 
-            System.out.println(p);
-        for (Player p : readyPlayers) 
-            System.out.println(p);
         int n = playersList.size();
         if (n != readyPlayers.size()) return false;
         int acc = 0;
@@ -136,17 +131,15 @@ public class Server implements Runnable {
         }
     }
 
-    private void printClients() {
-        System.out.println("\n Print clients : ");
+    public static void startGame() throws IOException {
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "ShowStart");
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
         for (ClientHandler client : clients) {
-            System.out.println("Client " + client.getId());
+            PrintWriter out = new PrintWriter(client.getSocket().getOutputStream(), true);
+            out.println(s);
         }
-        System.out.println();
-    }
-
-    public static void startGame() {
-        // TODO
-        System.out.println("GAME START");
     }
     
     public static void main(String[] args) {

@@ -33,6 +33,15 @@
                   </Button>
                </children>
             </Pane>
+            <Pane GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="start" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="39.0" layoutY="171.0" mnemonicParsing="false" onAction="#start_multi" prefHeight="98.0" prefWidth="222.0" style="-fx-background-color: #95d5b2;" text="START" visible="false">
+                     <font>
+                        <Font size="50.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
          </children>
       </GridPane>
       <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#back" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="BACK">

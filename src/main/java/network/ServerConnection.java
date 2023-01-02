@@ -44,6 +44,8 @@ public class ServerConnection implements Runnable {
                 } else if (message.equals("ReadyPlayers")) {
                     this.playersNamesList = (List<String>) map.get("list");
                     this.showReadyPlayers();
+                } else if (message.equals("ShowStart")) {
+                    this.lobby.showStart();
                 } else if (message.equals("Quit")) {
                     break;
                 }
