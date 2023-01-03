@@ -16,13 +16,13 @@ public class Server implements Runnable {
     public static final String SERVER_IP = "192.168.1.19"; 
     // public static final String SERVER_IP = "192.168.1.36"; // IP PC FIXE 
     public static final int SERVER_PORT = 4999;
-    private static final Server SERVER = initServer(SERVER_PORT);
+    public static final Server SERVER = initServer(SERVER_PORT);
     private final ServerSocket ss;
-    private static List<ClientHandler> clients = new ArrayList<>();
-    private static ExecutorService pool = Executors.newFixedThreadPool(10);
-    private static List<Player> playersList = new ArrayList<>();
-    private static List<Player> readyPlayers = new ArrayList<>();
     private boolean running = false;
+    private List<ClientHandler> clients = new ArrayList<>();
+    private ExecutorService pool = Executors.newFixedThreadPool(10);
+    private List<Player> playersList = new ArrayList<>();
+    private List<Player> readyPlayers = new ArrayList<>();
 
     private Server(int port) throws IOException {
         this.ss = new ServerSocket(port);
@@ -36,30 +36,22 @@ public class Server implements Runnable {
         }
     }
 
-    public static List<Player> getPlayersList() {return playersList;}
-    public static List<Player> getReadyPlayers() {return readyPlayers;}
+    public List<Player> getPlayersList() {return playersList;}
+    public List<Player> getReadyPlayers() {return readyPlayers;}
 
-    public static void addPlayer(Player p) {
+    public void addPlayer(Player p) {
         playersList.add(p);
     }
 
-    public static void addReadyPlayer(Player p) {
+    public void addReadyPlayer(Player p) {
         readyPlayers.add(p);
     }
 
-    public static void removePlayer(Player p) {
+    public void removePlayer(Player p) {
         for (Player player : playersList) {
             if (player.equals(p)) {
                 playersList.remove(player);
                 break;
-            }
-        }
-        if (p.isReady()) {
-            for (Player player : readyPlayers) {
-                if (player.equals(p)) {
-                    readyPlayers.remove(player);
-                    break;
-                }
             }
         }
     }
@@ -84,19 +76,24 @@ public class Server implements Runnable {
         }
     }
 
-    public static void showToEveryone(boolean ready) throws IOException {
+    public void runMultiplayerGame() throws IOException {
+        System.out.println("\n[SERVER] MULTIPLAYER GAME STARTED");
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "Begin");
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        for (ClientHandler client : clients) {
+            PrintWriter out = new PrintWriter(client.getSocket().getOutputStream(), true);
+            out.println(s);
+        }
+    }
+
+    public void showToEveryone() throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         List<String> names = new ArrayList<>();
-        if (!ready) {
-            map.put("message", "PlayersList");
-            for (Player p : playersList) {
-                names.add(p.getName() + "#" + p.getId());
-            }
-        } else {
-            map.put("message", "ReadyPlayers");
-            for (Player p : readyPlayers) {
-                names.add(p.getName() + "#" + p.getId());
-            }
+        map.put("message", "PlayersList");
+        for (Player p : playersList) {
+            names.add(p.getName() + "#" + p.getId());
         }
         map.put("list", names);
         Gson gson = new Gson();
@@ -107,7 +104,21 @@ public class Server implements Runnable {
         }
     }
 
-    public static boolean checkIfEveryoneIsReady() {
+    public void sendWordToEveryone(String word, ClientHandler sender) throws IOException {
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "GetWord");
+        map.put("word", word);
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        for (ClientHandler client : clients) {
+            if (client != sender) {
+                PrintWriter out = new PrintWriter(client.getSocket().getOutputStream(), true);
+                out.println(s);
+            }
+        }
+    }
+
+    public boolean checkIfEveryoneIsReady() {
         int n = playersList.size();
         if (n != readyPlayers.size()) return false;
         int acc = 0;
@@ -117,7 +128,7 @@ public class Server implements Runnable {
         return acc == n;
     }
 
-    public static void disconnect(ClientHandler cl) throws IOException {
+    public void disconnect(ClientHandler cl) throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "Disconnect");
         Gson gson = new Gson();
@@ -131,17 +142,6 @@ public class Server implements Runnable {
         }
     }
 
-    public static void startGame() throws IOException {
-        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-        map.put("message", "ShowStart");
-        Gson gson = new Gson();
-        String s = gson.toJson(map);
-        for (ClientHandler client : clients) {
-            PrintWriter out = new PrintWriter(client.getSocket().getOutputStream(), true);
-            out.println(s);
-        }
-    }
-    
     public static void main(String[] args) {
         new Thread(SERVER).start();
     }

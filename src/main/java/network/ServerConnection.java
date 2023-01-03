@@ -10,16 +10,17 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import javafx.application.Platform;
 import javafx.scene.text.Text;
-
 import controller.Lobby;
+import controller.Multi;
 
 @SuppressWarnings("unchecked")
 
 public class ServerConnection implements Runnable {
 
-    private Socket socket;
-    private Lobby lobby;
-    private BufferedReader in;
+    private final Socket socket;
+    private final Lobby lobby;
+    private final BufferedReader in;
+    private static Multi multi;
     private List<String> playersNamesList;
     
     public ServerConnection(Socket socket, Lobby lobby) throws IOException {
@@ -28,7 +29,9 @@ public class ServerConnection implements Runnable {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
+    public Socket getSocket() {return this.socket;}
     public List<String> getPlayersNamesList() {return this.playersNamesList;}
+    public static void setMulti(Multi m) {multi = m;}
 
     @Override
     public void run() {
@@ -41,13 +44,21 @@ public class ServerConnection implements Runnable {
                 if (message.equals("PlayersList")) {
                     this.playersNamesList = (List<String>) map.get("list");
                     this.drawNames();
-                } else if (message.equals("ReadyPlayers")) {
-                    this.playersNamesList = (List<String>) map.get("list");
-                    this.showReadyPlayers();
-                } else if (message.equals("ShowStart")) {
-                    this.lobby.showStart();
-                } else if (message.equals("Quit")) {
+                } else if (message.equals("Begin")) {
+                    Platform.runLater( () -> {
+                        try {
+                            this.lobby.startMulti();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            System.err.println("ServerConnection IOException");
+                        }
+                    });
+                } else if (message.equals("Disconnect")) {
                     break;
+                } else if (message.equals("GetWord")) {
+                    String word = (String) map.get("word");
+                    System.out.println(word);
+                    multi.addWordFromUser(word);
                 }
             }
         } catch (IOException e) {
@@ -71,12 +82,6 @@ public class ServerConnection implements Runnable {
             for (String name : playersNamesList) {
                 lobby.getVbox().getChildren().add(new Text(name));
             }
-        });
-    }
-
-    private void showReadyPlayers() {
-        Platform.runLater(() -> {
-
         });
     }
 

@@ -28,17 +28,16 @@ public class Lobby {
     @FXML private Scene scene;
     @FXML private Button ready;
     @FXML private VBox vbox;
-    @FXML private Button start;
 
     private Socket socket;
     private PrintWriter out;
     private ServerConnection connection;
     private static boolean visited = false;
-    private static boolean lobbyMode = true;
+    private static ActionEvent start;
 
-    public static void switchToMultiScene() {lobbyMode = false;}
 
     public VBox getVbox() {return vbox;}
+    public ServerConnection getConnection() {return connection;}
 
     @FXML
     public void initialize() {
@@ -57,14 +56,13 @@ public class Lobby {
             out.println(message);
         } catch (SocketException se) {
             System.out.println("[CLIENT] Client disconnected");
-            Thread.interrupted();
         } catch (IOException io) {
             io.printStackTrace();
             System.err.println("Lobby IOException");
         }
     }
 
-    public void ready_to_play() {
+    public void ready_to_play(ActionEvent event) throws IOException {
         PLAYER.setReady(true);
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         Gson gson = new Gson();
@@ -73,23 +71,23 @@ public class Lobby {
         String message = gson.toJson(map);
         out.println(message);
         System.out.println("Ready to play");
+        start = event;
+        this.ready.setVisible(false);
     }
 
-    public void showStart() {
-        start.setVisible(true);
-    }
-
-    public void start_multi(ActionEvent event) throws IOException {
+    public void startMulti() throws IOException {
+        ActionEvent event = start;
         Parent root = FXMLLoader.load(getClass().getResource("../multi.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setTitle(Global.GAME_TITLE);
         stage.setScene(scene);
         stage.show();
+        Multi.setConnection(this.connection);
     }
 
     public void back(ActionEvent event) throws IOException {
-        if (PLAYER.isReady()) this.quitLobby();
+        this.quitLobby();
         PLAYER.setReady(false);
         Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();

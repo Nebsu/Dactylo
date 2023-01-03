@@ -9,7 +9,7 @@
 
 <VBox alignment="CENTER" minHeight="600.0" minWidth="900.0" style="-fx-background-color: #252422;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
    <children>
-      <Label alignment="CENTER" text="DACTYL" textAlignment="CENTER" textFill="WHITE">
+      <Label alignment="CENTER" text="DACTYLO" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="61.0" />
          </font>
