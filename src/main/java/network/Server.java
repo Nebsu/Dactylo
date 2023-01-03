@@ -13,16 +13,15 @@ import com.google.gson.internal.LinkedTreeMap;
 
 public class Server implements Runnable {
     
-    public static final String SERVER_IP = "192.168.1.19"; 
-    // public static final String SERVER_IP = "192.168.1.36"; // IP PC FIXE 
+    private static String SERVER_IP = "192.168.1.19"; // default IP
     public static final int SERVER_PORT = 4999;
     public static final Server SERVER = initServer(SERVER_PORT);
     private final ServerSocket ss;
     private boolean running = false;
-    private List<ClientHandler> clients = new ArrayList<>();
-    private ExecutorService pool = Executors.newFixedThreadPool(10);
-    private List<Player> playersList = new ArrayList<>();
-    private List<Player> readyPlayers = new ArrayList<>();
+    private final List<ClientHandler> clients = new ArrayList<>();
+    private final ExecutorService pool = Executors.newFixedThreadPool(10);
+    private final List<Player> playersList = new ArrayList<>();
+    private final List<Player> readyPlayers = new ArrayList<>();
 
     private Server(int port) throws IOException {
         this.ss = new ServerSocket(port);
@@ -37,7 +36,15 @@ public class Server implements Runnable {
     }
 
     public List<Player> getPlayersList() {return playersList;}
+
     public List<Player> getReadyPlayers() {return readyPlayers;}
+
+    public static String getServerIP() {return SERVER_IP;}
+
+    public static void setServerIP(String serverIP) {
+        SERVER_IP = serverIP;
+        System.out.println("[SERVER] Server New IPV4 Adress : " + SERVER_IP);
+    }
 
     public void addPlayer(Player p) {
         playersList.add(p);

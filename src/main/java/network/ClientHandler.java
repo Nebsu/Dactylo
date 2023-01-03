@@ -40,7 +40,6 @@ public class ClientHandler implements Runnable {
                     String name = (String) map.get("pseudo");
                     Player p = new Player(name, this.id);
                     Global.PLAYER.setId(id);
-                    // System.out.println(p.getName());
                     SERVER.addPlayer(p);
                     SERVER.showToEveryone();
                 } else if (message.equals("Ready")) {

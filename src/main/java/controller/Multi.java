@@ -33,7 +33,7 @@ public class Multi extends Game {
 
     // Set the game, loads data and displays it, input listener
     public void initialize() {
-        Lobby.connection.setMulti(this);
+        Lobby.getConnection().setMulti(this);
         setTextFieldColor();
         setNewDictionary();
         remakeList();
@@ -193,7 +193,7 @@ public class Multi extends Game {
         map.put("word", word);
         Gson gson = new Gson();
         String s = gson.toJson(map);
-        PrintWriter out = new PrintWriter(Lobby.connection.getSocket().getOutputStream(), true);
+        PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
         out.println(s);
     }
 

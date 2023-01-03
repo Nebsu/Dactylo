@@ -31,20 +31,19 @@ public class Lobby {
 
     private Socket socket;
     private PrintWriter out;
-    public static ServerConnection connection;
+    private static ServerConnection connection;
     private static boolean visited = false;
     private static ActionEvent start;
 
-
     public VBox getVbox() {return vbox;}
-    public ServerConnection getConnection() {return connection;}
+    public static ServerConnection getConnection() {return connection;}
 
     @FXML
     public void initialize() {
         try {
             if (visited) return;
             visited = true;
-            this.socket = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
+            this.socket = new Socket(Server.getServerIP(), Server.SERVER_PORT);
             this.out = new PrintWriter(socket.getOutputStream(), true);
             connection = new ServerConnection(socket, this);
             new Thread(connection).start();
