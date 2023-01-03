@@ -31,7 +31,7 @@ public class Lobby {
 
     private Socket socket;
     private PrintWriter out;
-    private ServerConnection connection;
+    public static ServerConnection connection;
     private static boolean visited = false;
     private static ActionEvent start;
 
@@ -46,7 +46,7 @@ public class Lobby {
             visited = true;
             this.socket = new Socket(Server.SERVER_IP, Server.SERVER_PORT);
             this.out = new PrintWriter(socket.getOutputStream(), true);
-            this.connection = new ServerConnection(socket, this);
+            connection = new ServerConnection(socket, this);
             new Thread(connection).start();
             LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
             Gson gson = new Gson();
@@ -83,7 +83,6 @@ public class Lobby {
         stage.setTitle(Global.GAME_TITLE);
         stage.setScene(scene);
         stage.show();
-        Multi.setConnection(this.connection);
     }
 
     public void back(ActionEvent event) throws IOException {

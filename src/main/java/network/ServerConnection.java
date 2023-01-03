@@ -20,7 +20,7 @@ public class ServerConnection implements Runnable {
     private final Socket socket;
     private final Lobby lobby;
     private final BufferedReader in;
-    private static Multi multi;
+    private Multi multi;
     private List<String> playersNamesList;
     
     public ServerConnection(Socket socket, Lobby lobby) throws IOException {
@@ -31,7 +31,7 @@ public class ServerConnection implements Runnable {
 
     public Socket getSocket() {return this.socket;}
     public List<String> getPlayersNamesList() {return this.playersNamesList;}
-    public static void setMulti(Multi m) {multi = m;}
+    public void setMulti(Multi m) {multi = m;}
 
     @Override
     public void run() {

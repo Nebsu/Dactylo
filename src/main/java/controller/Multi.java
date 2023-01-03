@@ -19,25 +19,21 @@ import static misc.Global.*;
 import misc.GameSettings;
 import misc.Global;
 import misc.Word;
-import network.ServerConnection;
 
 public class Multi extends Game {
 
     private int health = DEFAULT_HEALTH;
     private int wordCount = DEFAULT_WORD_COUNT;
     private int score = 0;
-    private static ServerConnection connection;
-    private boolean hasConnection = false;
 
     @FXML private Label healthlbl = new Label();
     @FXML private Label wordCountlbl = new Label();
     @FXML private Label wordsLeft = new Label();
     @FXML private TextFlow textFlow = new TextFlow();
 
-    public static void setConnection(ServerConnection c) {connection = c;}
-
     // Set the game, loads data and displays it, input listener
     public void initialize() {
+        Lobby.connection.setMulti(this);
         setTextFieldColor();
         setNewDictionary();
         remakeList();
@@ -155,8 +151,6 @@ public class Multi extends Game {
                     health += word.length();
                     healthlbl.setText("" + health);
                 } else if (getWords().get(0).getType() == 'm') {
-                    health += word.length();
-                    healthlbl.setText("" + health);
                     try {
                         this.sendWord(word.toString());
                     } catch (IOException e) {
@@ -194,31 +188,36 @@ public class Multi extends Game {
     }
 
     private void sendWord(String word) throws IOException {
-        if (!hasConnection) ServerConnection.setMulti(this);
-        hasConnection = true;
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "SendWord");
         map.put("word", word);
         Gson gson = new Gson();
         String s = gson.toJson(map);
-        PrintWriter out = new PrintWriter(connection.getSocket().getOutputStream(), true);
+        PrintWriter out = new PrintWriter(Lobby.connection.getSocket().getOutputStream(), true);
         out.println(s);
     }
 
     public void addWordFromUser(String word) {
-        getWords().add(new Word(word, 'n'));
         Platform.runLater(() -> {
-            if(getWords().size() == Global.MAX_LIST_SIZE_MULTI){
-                health -= getWords().get(0).toString().length();
-                healthlbl.setText("" + health);
+            if(getWords().size() == Global.MAX_LIST_SIZE_MULTI) {
+                // forcer la validation du mot courant :
+                String word2 = getInput().getText();
+                if (!getWords().get(0).toString().equals(word2)) {
+                    // perte de vie :
+                    health -= compareWords(getWords().get(0).toString(), word2);
+                    getWords().remove(0);
+                    // health -= getWords().get(0).toString().length();
+                    healthlbl.setText("" + health);
+                }
+                // Game over : 
                 if (health <= 0) {
                     getText().setText("You typed " + wordCount + " words!");
                     // gameover
                 }
             }
+            getWords().add(new Word(word, 'n'));
             displayList();
             getInput().clear();
-            getInput().setEditable(false);
             wordsLeft.setText("" + getWords().size());
         });
     }
