@@ -41,7 +41,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="input" alignment="CENTER" maxWidth="500.0" minWidth="500.0" onKeyPressed="#checkWord" onKeyReleased="#removeSpace" prefHeight="39.0" prefWidth="500.0">
+                  <TextField fx:id="input" alignment="CENTER" maxWidth="500.0" minWidth="500.0" onKeyPressed="#checkWord" prefHeight="39.0" prefWidth="500.0">
                      <font>
                         <Font size="18.0" />
                      </font>

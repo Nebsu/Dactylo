@@ -162,4 +162,22 @@ public class Game {
             textFlow.getChildren().add(text);
         }
     }
+
+    public void displayMalus(){
+        textFlow.getChildren().clear();
+        textFlow.setTextAlignment(TextAlignment.CENTER);;
+        for(Word word: getWords()) {
+            Text text = new Text(word.toString() + " ");
+            text.setTranslateY(7);
+            text.setFont(javafx.scene.text.Font.font("System", 20));
+            if (word.getType() == 'b') {
+                text.setFill(Color.web("#95d5b2"));
+            } else if (word.getType() == 'm') {
+                text.setFill(Color.web("#ff0000"));
+            } else {
+                text.setFill(Color.web("#383734"));
+            }
+            textFlow.getChildren().add(text);
+        }
+    }
 }

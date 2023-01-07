@@ -8,9 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 import java.io.*;
@@ -28,10 +26,10 @@ public class Multi extends Game {
     private int health = DEFAULT_HEALTH;
     private int wordCount = DEFAULT_WORD_COUNT;
     private int score = 0;
+    private boolean isNewWord = false;
 
     @FXML private Label healthlbl = new Label();
     @FXML private Label wordsLeft = new Label();
-    @FXML private TextFlow textFlow = new TextFlow();
     @FXML private TextFlow podium = new TextFlow();
     @FXML private Label title = new Label();
     @FXML private Label over = new Label();
@@ -46,7 +44,7 @@ public class Multi extends Game {
         setTextFieldColor();
         setNewDictionary();
         remakeList();
-        displayList();
+        displayMalus();
         wordsLeft.setText("" + getWords().size());
         healthlbl.setText("" + health);
         getInput().textProperty().addListener((observable, oldValue, newValue) -> {
@@ -74,24 +72,6 @@ public class Multi extends Game {
         }
     }
 
-    // Display the words with the right color
-    public void displayList(){
-        textFlow.getChildren().clear();
-        textFlow.setTextAlignment(TextAlignment.CENTER);;
-        for(Word word: getWords()) {
-            Text text = new Text(word.toString() + " ");
-            text.setTranslateY(7);
-            text.setFont(javafx.scene.text.Font.font("System", 20));
-            if (word.getType() == 'b') {
-                text.setFill(Color.web("#95d5b2"));
-            } else if (word.getType() == 'm') {
-                text.setFill(Color.web("#ff1111"));
-            }  else {
-                text.setFill(Color.web("#383734"));
-            }
-            textFlow.getChildren().add(text);
-        }
-    }
 
     // Return number of difference between two words with different length
     public int compareWords(String word1, String word2){
@@ -150,18 +130,15 @@ public class Multi extends Game {
             wordsLeft.setText("" + getWords().size());
             getInput().setStyle("-fx-text-fill: #383734");
             //refresh the text
-            displayList();
+            displayMalus();
             getInput().clear();
-            getInput().setEditable(false);
-        }
-    }
-
-    // Remove the space after confirming the word
-    public void removeSpace(KeyEvent event) {
-        if (event.getCode() == KeyCode.SPACE) {
-            getInput().clear();
-            getInput().setEditable(true);
-            event.consume();
+            isNewWord = true;
+        }else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE && event.getCode() != KeyCode.ESCAPE && getGamestate()) {
+            //If the user is typing a new word, clear the text
+            if (isNewWord) {
+                getInput().clear();
+                isNewWord = false;
+            }
         }
     }
 
@@ -198,7 +175,7 @@ public class Multi extends Game {
                 }
             }
             getWords().add(new Word(word, 'n'));
-            displayList();
+            displayMalus();
             getInput().clear();
             wordsLeft.setText("" + getWords().size());
         });
@@ -271,7 +248,7 @@ public class Multi extends Game {
         this.health = DEFAULT_HEALTH;
         this.healthlbl.setText("" + health);
         remakeList();
-        displayList();
+        displayMalus();
         try {
             Thread.sleep(1000);
             this.podiumRequest();
