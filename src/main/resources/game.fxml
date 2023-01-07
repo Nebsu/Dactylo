@@ -35,7 +35,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="input" alignment="CENTER" maxWidth="500.0" minWidth="500.0" onKeyPressed="#checkWord" onKeyReleased="#removeSpace" prefHeight="39.0" prefWidth="500.0">
+                  <TextField fx:id="input" alignment="CENTER" maxWidth="500.0" minWidth="500.0" onKeyPressed="#checkWord" prefHeight="39.0" prefWidth="500.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -83,7 +83,7 @@
                      <children>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="wpm" alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="0" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="wpm" alignment="CENTER" prefHeight="43.0" prefWidth="234.0" text="-" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -92,7 +92,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="accuracy" alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="0" textFill="WHITE">
+                              <Label fx:id="accuracy" alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="-" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -101,7 +101,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="regularity" alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="0" textFill="WHITE">
+                              <Label fx:id="regularity" alignment="CENTER" layoutY="2.0" prefHeight="43.0" prefWidth="234.0" text="-" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -145,6 +145,15 @@
                   </Label>
                </children>
             </HBox>
+            <Pane prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="2">
+               <children>
+                  <Button layoutX="40.0" layoutY="8.0" mnemonicParsing="false" onAction="#reset" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="RESET">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
          </children>
       </GridPane>
    </children>

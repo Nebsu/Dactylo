@@ -2,6 +2,7 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -28,6 +29,7 @@ public class Solo extends Game {
     private int level = DEFAULT_LEVEL;
     private int score = 0;
     private double interval = 3*Math.pow(0.9, level);
+    private boolean isNewWord = false;
 
     @FXML
     private Label healthlbl = new Label();
@@ -205,7 +207,7 @@ public class Solo extends Game {
             loadData();
         } catch (Exception e) {
         }
-        wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
+        wordCountlbl.setText(""+ (WORDS_TO_LEVEL_UP - wordCount));
         wordsLeft.setText("" + getWords().size());
         healthlbl.setText("" + health);
         levellbl.setText("" + level);
@@ -213,6 +215,7 @@ public class Solo extends Game {
             if (!getWords().isEmpty()) {
                 if (newValue.length() <= getWords().get(0).toString().length()) {
                     if (!newValue.equals(getWords().get(0).toString().substring(0, newValue.length()))) {
+                        if (!newValue.equals(" "))
                         getInput().setStyle("-fx-text-fill: #e83e3e;");
                     } else {
                         getInput().setStyle("-fx-text-fill: #383734;");
@@ -231,18 +234,27 @@ public class Solo extends Game {
             public void run() {
                 Platform.runLater(() -> {
                     if(getWords().size() == GameSettings.getWords_max_length()){
-                        health -= getWords().get(0).toString().length();
-                        healthlbl.setText("" + health);
+                        String word2 = getInput().getText();
+                        if (!getWords().get(0).toString().equals(word2)) {
+                            // perte de vie :
+                            health -= compareWords(getWords().get(0).toString(), word2);
+                            getWords().remove(0);
+                            getInput().clear();
+                            healthlbl.setText("" + health);
+                        }
                         if (health <= 0) {
+                            getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
+                            getWords().clear();
+                            getInput().setDisable(true);
+                            setGamestate(false);
+                            reset();
                             timer.cancel();
                             timer.purge();
-                            getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
-                            reset();
                         }
-                    } else {
-                        getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
                     }
+                    getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
                     displayList();
+
                     wordsLeft.setText("" + getWords().size());
                 });
             }
@@ -262,6 +274,8 @@ public class Solo extends Game {
         levellbl.setText("" + level);
         interval = 3*Math.pow(0.9, level);
         setGamestate(false);
+        getInput().setEditable(true);
+        getInput().setDisable(false);
         getInput().clear();
         remakeList();
         for (int i = 0; i < GameSettings.getWords_max_length()/2+1; i++) {
@@ -296,15 +310,12 @@ public class Solo extends Game {
 
     // Do the action when the user presses space
     public void checkWord(KeyEvent event) {
-        if (getGamestate() == false) {
+        if (getGamestate() == false && event.getCode() != KeyCode.SPACE) {
             setGamestate(true);
             timer = new Timer();
             timerStart();
         }
-        if (event.getCode() == KeyCode.ESCAPE) {
-            reset();
-        }
-        if (event.getCode() == KeyCode.SPACE && !getWords().isEmpty()) {
+        if (event.getCode() == KeyCode.SPACE && getGamestate()) {
             String word = getInput().getText();
             if (!getWords().get(0).toString().equals(word)) {
                 health -= compareWords(getWords().get(0).toString(), word);
@@ -313,7 +324,6 @@ public class Solo extends Game {
                     timer.cancel();
                     timer.purge();
                     getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
-                    reset();
                 }
             } else {
                 score += word.length();
@@ -338,19 +348,14 @@ public class Solo extends Game {
             wordsLeft.setText("" + getWords().size());
             getInput().setStyle("-fx-text-fill: #383734");
             //refresh the text
+            isNewWord = true;
             displayList();
             getInput().clear();
-            getInput().setEditable(false);
+        } else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE) {
+            if (isNewWord) {
+                getInput().clear();
+                isNewWord = false;
+            }
         }
     }
-
-    // Remove the space after confirming the word
-    public void removeSpace(KeyEvent event) {
-        if (event.getCode() == KeyCode.SPACE) {
-            getInput().clear();
-            getInput().setEditable(true);
-            event.consume();
-        }
-    }
-
 }

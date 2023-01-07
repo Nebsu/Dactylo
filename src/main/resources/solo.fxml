@@ -46,7 +46,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="input" alignment="CENTER" maxWidth="500.0" minWidth="500.0" onKeyPressed="#checkWord" onKeyReleased="#removeSpace" prefHeight="39.0" prefWidth="500.0">
+                  <TextField fx:id="input" alignment="CENTER" maxWidth="500.0" minWidth="500.0" onKeyPressed="#checkWord" prefHeight="39.0" prefWidth="500.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -158,6 +158,11 @@
             <Pane prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="2">
                <children>
                   <Button fx:id="savebtn" layoutX="41.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveData" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="SAVE">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="-18.0" layoutY="14.0" mnemonicParsing="false" onAction="#reset" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="RESET">
                      <font>
                         <Font size="10.0" />
                      </font>

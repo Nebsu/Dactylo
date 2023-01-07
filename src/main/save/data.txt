@@ -1,9 +1,9 @@
 default:false
-health:20
-score:0
-wordCount:0
-level:1
+health:13
+score:553
+wordCount:9
+level:6
 username:Player
 difficulty:src/main/dictionary/easy.txt
 maxWords:15
-words:fight,m;fight,m;voice,m;perform,n;peace,n;last,n;real,n;claim,n;
+words:practice,m;energy,m;candidate,m;through,b;morning,n;himself,m;film,n;
