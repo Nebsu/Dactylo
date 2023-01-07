@@ -5,9 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 import java.io.*;
@@ -40,26 +37,6 @@ public class Solo extends Game {
     private Label wordsLeft = new Label();
     @FXML
     private TextFlow textFlow = new TextFlow();
-
-    
-/**
- * It takes a list of words, and displays them in a TextFlow object with the correct color.(￣▽￣)ノ
- */
-    public void displayList(){
-        textFlow.getChildren().clear();
-        textFlow.setTextAlignment(TextAlignment.CENTER);;
-        for(Word word: getWords()) {
-            Text text = new Text(word.toString() + " ");
-            text.setTranslateY(7);
-            text.setFont(javafx.scene.text.Font.font("System", 20));
-            if (word.getType() == 'b') {
-                text.setFill(Color.web("#95d5b2"));
-            }  else {
-                text.setFill(Color.web("#383734"));
-            }
-            textFlow.getChildren().add(text);
-        }
-    }
 
 
 /**
@@ -205,20 +182,18 @@ public class Solo extends Game {
         healthlbl.setText("" + health);
         levellbl.setText("" + level);
         getInput().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!getWords().isEmpty()) {
-                if (newValue.length() <= getWords().get(0).toString().length()) {
-                    if (!newValue.equals(getWords().get(0).toString().substring(0, newValue.length()))) {
-                        // If the input is wrong
-                        if (!newValue.equals(" "))
-                        getInput().setStyle("-fx-text-fill: #e83e3e;");
-                    } else {
-                        // If the input is correct
-                        getInput().setStyle("-fx-text-fill: #383734;");
-                    }
-                } else {
-                    // If the input is longer than the word
+            if (newValue.length() <= getWords().get(0).toString().length()) {
+                if (!newValue.equals(getWords().get(0).toString().substring(0, newValue.length()))) {
+                    // If the input is wrong
+                    if (!newValue.equals(" "))
                     getInput().setStyle("-fx-text-fill: #e83e3e;");
+                } else {
+                    // If the input is correct
+                    getInput().setStyle("-fx-text-fill: #383734;");
                 }
+            } else {
+                // If the input is longer than the word
+                getInput().setStyle("-fx-text-fill: #e83e3e;");
             }
         });
     }
@@ -239,12 +214,7 @@ public class Solo extends Game {
             setGamestate(false);
             timer.cancel();
             timer.purge();
-            Text text = new Text("Your reached level " + level + " and typed " + wordCount + " words!");
-            text.setTranslateY(7);
-            text.setFont(javafx.scene.text.Font.font("System", 20));
-            text.setFill(Color.web("#383734"));
-            textFlow.getChildren().clear();
-            textFlow.getChildren().add(text);
+            setNewText("Your reached level " + level + " and typed " + wordCount + " words!");
             return true;
         }
         return false;
@@ -388,14 +358,15 @@ public class Solo extends Game {
             wordsLeft.setText("" + getWords().size());
             getInput().setStyle("-fx-text-fill: #383734");
             //refresh the text
-            isNewWord = true;
-            if (health > 0){
+            if (getWords().size() > 0) {
                 getWords().remove(0);
-                getInput().clear();
-                displayList();
             }
+            displayList();
+            getInput().clear();
+            isNewWord = true;
+        }else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE && event.getCode() != KeyCode.ESCAPE && getGamestate()) {
+            //If the user is typing a new word, clear the text
             if (isNewWord) {
-                //If the user is typing a new word, clear the text
                 getInput().clear();
                 isNewWord = false;
             }

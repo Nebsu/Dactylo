@@ -13,6 +13,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -31,12 +34,14 @@ public class Game {
     private ArrayList<Word> dictionary = new ArrayList<>();
     private ArrayList <Word> words = new ArrayList<>();
     @FXML
-    private Label text = new Label();
+    private TextFlow textFlow = new TextFlow();
     @FXML
     private Scene scene;
     private Stage stage;
     @FXML
     private TextField input = new TextField();
+    @FXML
+    private Label text = new Label();
 
     public ArrayList<Word> getDictionary() {
         return dictionary;
@@ -46,11 +51,11 @@ public class Game {
         return words;
     }
 
-    public Label getText() {
-        return text;
+    public TextFlow getText() {
+        return textFlow;
     }
 
-    public void setText(Label text) { this.text = text; }
+    public void setText(TextFlow text) { this.textFlow = text; }
 
     public TextField getInput() {
         return input;
@@ -111,7 +116,7 @@ public class Game {
         }
         stream.forEach(s -> {
             words.add(s);
-            text.setText(text.getText() + s + " ");
+            this.text.setText(this.text.getText() + s + " ");
         });
     }
 
@@ -132,4 +137,28 @@ public class Game {
         }
     }
 
+    public void setNewText(String newText) {
+        Text text = new Text(newText);
+            text.setTranslateY(7);
+            text.setFont(javafx.scene.text.Font.font("System", 20));
+            text.setFill(Color.web("#383734"));
+            textFlow.getChildren().clear();
+            textFlow.getChildren().add(text);
+    }
+
+    public void displayList(){
+        textFlow.getChildren().clear();
+        textFlow.setTextAlignment(TextAlignment.CENTER);;
+        for(Word word: getWords()) {
+            Text text = new Text(word.toString() + " ");
+            text.setTranslateY(7);
+            text.setFont(javafx.scene.text.Font.font("System", 20));
+            if (word.getType() == 'b') {
+                text.setFill(Color.web("#95d5b2"));
+            }  else {
+                text.setFill(Color.web("#383734"));
+            }
+            textFlow.getChildren().add(text);
+        }
+    }
 }

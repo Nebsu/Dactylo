@@ -1,6 +1,5 @@
 package controller;
 
-import com.sun.javafx.UnmodifiableArrayList;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -55,6 +54,7 @@ public class TrainingGame extends Game {
         setTextFieldColor();
         setNewDictionary();
         remakeList();
+        setNewText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
         getInput().textProperty().addListener((observable, oldValue, newValue) -> {
             //When we reach the end of the word
             if (newValue.length() <= getWords().get(0).toString().length()) {
@@ -107,7 +107,7 @@ public class TrainingGame extends Game {
                         //System.out.println("utilcharcounter: " + utilcharcounter);
                         //System.out.println("hitcounter: " + hitcounter);
                         if (utilcharcounter > 0)  utilcharcounter -= hitcounter;
-                        getText().setText("Press reset button to play again");
+                        setNewText("Press reset button to play again");
                         setWpm();
                         setAccuracy();
                         setRegularity();
@@ -180,7 +180,8 @@ public class TrainingGame extends Game {
         getInput().setEditable(true);
         getInput().setDisable(false);
         getInput().clear();
-        getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
+        // getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
+        setNewText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
     }
 
 
@@ -205,7 +206,7 @@ public class TrainingGame extends Game {
             getWords().remove(0);
             getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
             //refresh the text
-            getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
+            setNewText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
             getInput().clear();
             //getInput().setEditable(false);
             isNewWord = true;
