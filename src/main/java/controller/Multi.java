@@ -269,6 +269,9 @@ public class Multi extends Game {
     public void replay() {
         this.score = 0;
         this.health = DEFAULT_HEALTH;
+        this.healthlbl.setText("" + health);
+        remakeList();
+        displayList();
         try {
             Thread.sleep(1000);
             this.podiumRequest();
