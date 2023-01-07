@@ -2,7 +2,7 @@ package network;
 
 import misc.Global;
 
-public class Player {
+public final class Player {
 
     private final String name;
     private int id;
@@ -41,6 +41,7 @@ public class Player {
         return name + " " + String.valueOf(id);
     }
 
+    // Compares the id and the name :
     @Override
     public boolean equals(Object arg0) {
         if (!(arg0 instanceof Player)) return false;

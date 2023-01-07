@@ -2,16 +2,15 @@ package misc;
 
 import java.util.Random;
 
-public class Word {
+public final class Word {
     
-    private String word;
-    private char type;
+    private final String word;
+    private final char type;
 
     public Word(String word){
         this.word = word;
         this.type = randomBoolean();
     }
-
     public Word(String word, char type){
         this.word = word;
         this.type = type;

@@ -23,20 +23,15 @@ import java.util.Collections;
 import static misc.Global.*;
 import misc.Global;
 
-public class LeaderboardController {
+public final class LeaderboardController {
 
-    @FXML
-    private TableView<LeaderboardData> list;
-    @FXML
-    private TableColumn<LeaderboardData, String> nameColumn;
-    @FXML
-    private TableColumn<LeaderboardData, String> scoreColumn;
-    @FXML
-    private TableColumn<LeaderboardData, String> levelColumn;
+    @FXML private TableView<LeaderboardData> list;
+    @FXML private TableColumn<LeaderboardData, String> nameColumn;
+    @FXML private TableColumn<LeaderboardData, String> scoreColumn;
+    @FXML private TableColumn<LeaderboardData, String> levelColumn;
 
-    @FXML
-    private Stage stage;
-    private Scene scene;
+    @FXML private Stage stage;
+    @FXML private Scene scene;
 
 /**
  * It reads a file, splits the lines into parts, creates a new LeaderboardData object with the parts,
@@ -92,7 +87,7 @@ public class LeaderboardController {
 /**
  * It's a class that holds the data for a single row in the leaderboard table
  */
-    class LeaderboardData {
+    final class LeaderboardData {
 
         private String username;
         private int level;
@@ -102,14 +97,6 @@ public class LeaderboardController {
             this.username = username;
             this.level = level;
             this.score = score;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public int getLevel() {
-            return level;
         }
 
         public int getScore() {

@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
-public class Server implements Runnable {
+public final class Server implements Runnable {
     
     private static String SERVER_IP = "kyan.sportday.fr"; // default IP
     public static final int SERVER_PORT = 4999;
@@ -39,9 +39,9 @@ public class Server implements Runnable {
         }
     }
 
-    public List<Player> getPlayersList() {return playersList;}
+    public List<Player> getPlayersList() {return new ArrayList<>(playersList);}
 
-    public List<Player> getReadyPlayers() {return readyPlayers;}
+    public List<Player> getReadyPlayers() {return new ArrayList<>(readyPlayers);}
 
     public static String getServerIP() {return SERVER_IP;}
 
@@ -199,7 +199,7 @@ public class Server implements Runnable {
  * It sends a message to all the clients that the game has ended, and then clears the list of players
  * who are ready to play and the list of players who are alive
  */
-    private void endGame() throws IOException {
+    public void endGame() throws IOException {
         // Signal for end screen :
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "End");

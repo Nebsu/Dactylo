@@ -15,20 +15,14 @@ import java.io.IOException;
 
 import misc.Global;
 
-public class MenuController {
+public final class MenuController {
 
-    @FXML
-    private Button solobutton;
-    @FXML
-    private Button multibutton;
-    @FXML
-    private Button settingsbutton;
-    @FXML
-    private Button quitbutton;
-    @FXML
-    private Scene scene;
-    private Stage stage;
-
+    @FXML private Button solobutton;
+    @FXML private Button multibutton;
+    @FXML private Button settingsbutton;
+    @FXML private Button quitbutton;
+    @FXML private Scene scene;
+    @FXML private Stage stage;
 
 /**
  * When the user clicks the button, the program will exit.
@@ -121,7 +115,6 @@ public class MenuController {
                 System.err.println("IO Exception Menu"); 
             }
         });
- 
     }
 
 }

@@ -17,7 +17,7 @@ import misc.GameSettings;
 import misc.Global;
 import misc.Word;
 
-public class Solo extends Game {
+public final class Solo extends Game {
 
     private Timer timer;
     private int health = DEFAULT_HEALTH;
@@ -27,16 +27,11 @@ public class Solo extends Game {
     private double interval = 3*Math.pow(0.9, level);
     private boolean isNewWord = false;
 
-    @FXML
-    private Label healthlbl = new Label();
-    @FXML
-    private Label wordCountlbl = new Label();
-    @FXML
-    private Label levellbl = new Label();
-    @FXML
-    private Label wordsLeft = new Label();
-    @FXML
-    private TextFlow textFlow = new TextFlow();
+    @FXML private Label healthlbl = new Label();
+    @FXML private Label wordCountlbl = new Label();
+    @FXML private Label levellbl = new Label();
+    @FXML private Label wordsLeft = new Label();
+    @FXML private TextFlow textFlow = new TextFlow();
 
 
 /**

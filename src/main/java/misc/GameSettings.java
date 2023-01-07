@@ -1,6 +1,6 @@
 package misc;
 
-public class GameSettings {
+public final class GameSettings {
 
     private static String difficulty = String.valueOf(Difficulty.EASY.getPath());
     private static String difficultyName = "Easy";
