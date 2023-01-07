@@ -72,28 +72,6 @@ public class Multi extends Game {
         }
     }
 
-
-    // Return number of difference between two words with different length
-    public int compareWords(String word1, String word2){
-        int difference = 0;
-        if(word1.length() > word2.length()){
-            for(int i = 0; i < word2.length(); i++){
-                if(word1.charAt(i) != word2.charAt(i)){
-                    difference++;
-                }
-            }
-            difference += word1.length() - word2.length();
-        } else {
-            for(int i = 0; i < word1.length(); i++){
-                if(word1.charAt(i) != word2.charAt(i)){
-                    difference++;
-                }
-            }
-            difference += word2.length() - word1.length();
-        }
-        return difference;
-    }
-
     // Do the action when the user presses space
     public void checkWord(KeyEvent event) {
         if (getGamestate() == false) {
