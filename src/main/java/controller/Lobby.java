@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
@@ -45,7 +46,8 @@ public class Lobby {
     public void initialize() {
         while (!visited) {
             try {
-                this.socket = new Socket(Server.getServerIP(), Server.SERVER_PORT);
+                InetAddress host = InetAddress.getLocalHost();
+                this.socket = new Socket(host.getHostName(), Server.SERVER_PORT);
                 this.out = new PrintWriter(socket.getOutputStream(), true);
                 connection = new ServerConnection(socket, this);
                 new Thread(connection).start();
