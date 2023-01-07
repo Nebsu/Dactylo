@@ -18,6 +18,7 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private int id;
     private BufferedReader in;
+    private Player player;
 
     public ClientHandler(Socket socket, int id) throws IOException {
         this.socket = socket;
@@ -38,22 +39,18 @@ public class ClientHandler implements Runnable {
                 String message = (String) map.get("message");
                 if (message.equals("Connection")) {
                     String name = (String) map.get("pseudo");
-                    Player p = new Player(name, this.id);
-                    Global.PLAYER.setId(id);
-                    SERVER.addPlayer(p);
+                    this.player = new Player(name, this.id);
+                    Global.PLAYER.setId(this.id);
+                    SERVER.addPlayer(this.player);
                     SERVER.showToEveryone();
                 } else if (message.equals("Ready")) {
-                    String name = (String) map.get("pseudo");
-                    Player p = new Player(name, this.id);
-                    p.setReady(true);
+                    this.player.setReady(true);
                     System.out.println("[SERVER] Player"+ this.id + " is ready");
-                    SERVER.addReadyPlayer(p);
+                    SERVER.addReadyPlayer(this.player);
                     if (SERVER.checkIfEveryoneIsReady())
                         SERVER.runMultiplayerGame();
                 } else if (message.equals("Quit")) {
-                    String name = (String) map.get("pseudo");
-                    Player p = new Player(name, this.id);
-                    SERVER.removePlayer(p);
+                    SERVER.removePlayer(this.player);
                     SERVER.showToEveryone();
                     SERVER.disconnect(this);
                     break;
@@ -61,6 +58,13 @@ public class ClientHandler implements Runnable {
                     String word = (String) map.get("word");
                     System.out.println(word);
                     SERVER.sendWordToEveryone(word, this);
+                } else if (message.equals("SendStats")) {
+                    int score = Integer.parseInt((String) map.get("score"));
+                    int health = Integer.parseInt((String) map.get("health"));
+                    SERVER.updatePlayerStats(score, health, this.player);
+                    SERVER.showLeaderboard();
+                } else if (message.equals("GameOver")) {
+                    SERVER.killPlayer(this.player);
                 }
             }
         } catch (SocketException se) {

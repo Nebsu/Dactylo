@@ -22,6 +22,7 @@ public class ServerConnection implements Runnable {
     private final BufferedReader in;
     private Multi multi;
     private List<String> playersNamesList;
+    private List<String> leaderbord;
     
     public ServerConnection(Socket socket, Lobby lobby) throws IOException {
         this.socket = socket;
@@ -59,6 +60,9 @@ public class ServerConnection implements Runnable {
                     String word = (String) map.get("word");
                     System.out.println(word);
                     multi.addWordFromUser(word);
+                } else if (message.equals("Leaderboard")) {
+                    this.leaderbord = (List<String>) map.get("list");
+                    multi.drawLeaderboard(leaderbord);
                 }
             }
         } catch (IOException e) {

@@ -11,6 +11,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 import java.io.*;
+import java.util.List;
 import java.util.Random;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -27,9 +28,9 @@ public class Multi extends Game {
     private int score = 0;
 
     @FXML private Label healthlbl = new Label();
-    @FXML private Label wordCountlbl = new Label();
     @FXML private Label wordsLeft = new Label();
     @FXML private TextFlow textFlow = new TextFlow();
+    @FXML private TextFlow leaderboard = new TextFlow();
 
     // Set the game, loads data and displays it, input listener
     public void initialize() {
@@ -38,7 +39,6 @@ public class Multi extends Game {
         setNewDictionary();
         remakeList();
         displayList();
-        wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
         wordsLeft.setText("" + getWords().size());
         healthlbl.setText("" + health);
         getInput().textProperty().addListener((observable, oldValue, newValue) -> {
@@ -137,38 +137,33 @@ public class Multi extends Game {
         }
         if (event.getCode() == KeyCode.SPACE && !getWords().isEmpty()) {
             String word = getInput().getText();
-            if (!getWords().get(0).toString().equals(word)) {
-                health -= compareWords(getWords().get(0).toString(), word);
-                healthlbl.setText(""+health);
-                if (health <= 0) {
-                    getText().setText("You typed " + wordCount + " words!");
-                    // game over
-                    System.exit(0);
-                }
-            } else {
-                score += word.length();
-                if (getWords().get(0).getType() == 'b') {
-                    health += word.length();
-                    healthlbl.setText("" + health);
-                } else if (getWords().get(0).getType() == 'm') {
-                    try {
-                        this.sendWord(word.toString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        System.err.println("IOException Multi");
+            try {
+                if (!getWords().get(0).toString().equals(word)) {
+                    health -= compareWords(getWords().get(0).toString(), word);
+                    healthlbl.setText(""+health);
+                    if (health <= 0) this.gameOver();
+                } else {
+                    score += word.length();
+                    if (getWords().get(0).getType() == 'b') {
+                        health += word.length();
+                        healthlbl.setText("" + health);
+                    } else if (getWords().get(0).getType() == 'm') {
+                            this.sendWord(word.toString());
                     }
-                }
+                    this.sendStats();
+                } 
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("IOException Multi");
             }
             wordCount++;
             if (wordCount == Global.WORDS_TO_LEVEL_UP) {
                 wordCount = 0;
-                wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP));
             }
             getWords().remove(0);
             if (getWords().size() < Global.MAX_LIST_SIZE_MULTI/2) {
                 getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
             }
-            wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
             wordsLeft.setText("" + getWords().size());
             getInput().setStyle("-fx-text-fill: #383734");
             //refresh the text
@@ -197,6 +192,17 @@ public class Multi extends Game {
         out.println(s);
     }
 
+    private void sendStats() throws IOException {
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "SendStats");
+        map.put("score", String.valueOf(score));
+        map.put("health", String.valueOf(health));
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
+        out.println(s);
+    }
+
     public void addWordFromUser(String word) {
         Platform.runLater(() -> {
             if(getWords().size() == Global.MAX_LIST_SIZE_MULTI) {
@@ -211,14 +217,38 @@ public class Multi extends Game {
                 }
                 // Game over : 
                 if (health <= 0) {
-                    getText().setText("You typed " + wordCount + " words!");
-                    // gameover
+                    try {
+                        this.gameOver();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.err.println("IOException Multi");
+                    }
                 }
             }
             getWords().add(new Word(word, 'n'));
             displayList();
             getInput().clear();
             wordsLeft.setText("" + getWords().size());
+        });
+    }
+
+    public void gameOver() throws IOException {
+        getText().setText("Game Over !");
+        getInput().setEditable(false);
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "GameOver");
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
+        out.println(s);
+    }
+
+    public void drawLeaderboard(List<String> names) {
+        Platform.runLater(() -> {
+            leaderboard.getChildren().clear();
+            for (String s : names) {
+                leaderboard.getChildren().add(new Text(s));
+            }
         });
     }
 

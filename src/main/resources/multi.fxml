@@ -57,7 +57,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="WORDS TILL NEXT LEVEL" textFill="WHITE" wrapText="true">
+                              <Label alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" text="LEADERBOARD" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -88,11 +88,7 @@
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">
                            <children>
-                              <Label fx:id="wordCountlbl" alignment="CENTER" layoutY="1.0" prefHeight="43.0" prefWidth="234.0" textFill="WHITE">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
+                              <TextFlow fx:id="leaderboard" prefHeight="245.0" prefWidth="234.0" style="-fx-background-color: #95d5b2;" textAlignment="CENTER" />
                            </children>
                         </Pane>
                         <Pane prefHeight="43.0" prefWidth="240.0">

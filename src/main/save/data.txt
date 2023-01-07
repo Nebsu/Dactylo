@@ -4,6 +4,6 @@ score:0
 wordCount:0
 level:1
 username:Player
-difficulty:src/main/dictionary/easy.txt
-maxWords:15
-words:fight,m;fight,m;voice,m;perform,n;peace,n;last,n;real,n;claim,n;
+difficulty:src/main/dictionary/hard.txt
+maxWords:20
+words:midlands,b;throw,m;devel,n;associated,n;debug,m;video,n;surgeon,n;locking,n;cleanup,n;stephanie,m;

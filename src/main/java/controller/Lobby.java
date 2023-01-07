@@ -66,7 +66,6 @@ public class Lobby {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         Gson gson = new Gson();
         map.put("message", "Ready");
-        map.put("pseudo", PLAYER.getName());
         String message = gson.toJson(map);
         out.println(message);
         System.out.println("Ready to play");
