@@ -54,15 +54,12 @@ public class ClientHandler implements Runnable {
                     SERVER.showToEveryone();
                     SERVER.disconnect(this);
                     break;
+                } else if (message.equals("PodiumRequest")) {
+                    SERVER.updatePodium();
                 } else if (message.equals("SendWord")) {
                     String word = (String) map.get("word");
                     System.out.println(word);
                     SERVER.sendWordToEveryone(word, this);
-                } else if (message.equals("SendStats")) {
-                    int score = Integer.parseInt((String) map.get("score"));
-                    int health = Integer.parseInt((String) map.get("health"));
-                    SERVER.updatePlayerStats(score, health, this.player);
-                    SERVER.showLeaderboard();
                 } else if (message.equals("GameOver")) {
                     SERVER.killPlayer(this.player);
                 }

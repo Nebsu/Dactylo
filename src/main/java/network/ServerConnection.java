@@ -22,7 +22,7 @@ public class ServerConnection implements Runnable {
     private final BufferedReader in;
     private Multi multi;
     private List<String> playersNamesList;
-    private List<String> leaderbord;
+    private List<String> alivePlayers;
     
     public ServerConnection(Socket socket, Lobby lobby) throws IOException {
         this.socket = socket;
@@ -60,9 +60,9 @@ public class ServerConnection implements Runnable {
                     String word = (String) map.get("word");
                     System.out.println(word);
                     multi.addWordFromUser(word);
-                } else if (message.equals("Leaderboard")) {
-                    this.leaderbord = (List<String>) map.get("list");
-                    multi.drawLeaderboard(leaderbord);
+                } else if (message.equals("Alive")) {
+                    this.alivePlayers = (List<String>) map.get("names");
+                    multi.drawPodium(alivePlayers);
                 }
             }
         } catch (IOException e) {
@@ -84,7 +84,11 @@ public class ServerConnection implements Runnable {
         Platform.runLater(() -> {
             lobby.getVbox().getChildren().clear();
             for (String name : playersNamesList) {
-                lobby.getVbox().getChildren().add(new Text(name));
+                Text t = new Text(name);
+                t.setStyle("-fx-font-size: 30px;");
+                t.setStyle("-fx-font-weight: bold;");
+                t.setStyle("-fx-font-color: #ffffff;");
+                lobby.getVbox().getChildren().add(t);
             }
         });
     }

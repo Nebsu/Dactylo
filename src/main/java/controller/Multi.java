@@ -30,7 +30,8 @@ public class Multi extends Game {
     @FXML private Label healthlbl = new Label();
     @FXML private Label wordsLeft = new Label();
     @FXML private TextFlow textFlow = new TextFlow();
-    @FXML private TextFlow leaderboard = new TextFlow();
+    @FXML private TextFlow podium = new TextFlow();
+    @FXML private Label title = new Label();
 
     // Set the game, loads data and displays it, input listener
     public void initialize() {
@@ -54,6 +55,16 @@ public class Multi extends Game {
                 }
             }
         });
+        try {
+            Thread.sleep(1000);
+            this.podiumRequest();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("InterruptedException Multi");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("IOException Multi"); 
+        }
     }
 
     // Display the words with the right color
@@ -150,7 +161,6 @@ public class Multi extends Game {
                     } else if (getWords().get(0).getType() == 'm') {
                             this.sendWord(word.toString());
                     }
-                    this.sendStats();
                 } 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -192,17 +202,6 @@ public class Multi extends Game {
         out.println(s);
     }
 
-    private void sendStats() throws IOException {
-        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-        map.put("message", "SendStats");
-        map.put("score", String.valueOf(score));
-        map.put("health", String.valueOf(health));
-        Gson gson = new Gson();
-        String s = gson.toJson(map);
-        PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
-        out.println(s);
-    }
-
     public void addWordFromUser(String word) {
         Platform.runLater(() -> {
             if(getWords().size() == Global.MAX_LIST_SIZE_MULTI) {
@@ -233,23 +232,38 @@ public class Multi extends Game {
     }
 
     public void gameOver() throws IOException {
-        getText().setText("Game Over !");
         getInput().setEditable(false);
+        getInput().setVisible(false);
+        title.setText("GAME OVER !");
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "GameOver");
         Gson gson = new Gson();
         String s = gson.toJson(map);
         PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
         out.println(s);
+        podiumRequest();
     }
 
-    public void drawLeaderboard(List<String> names) {
+    public void drawPodium(List<String> names) {
         Platform.runLater(() -> {
-            leaderboard.getChildren().clear();
-            for (String s : names) {
-                leaderboard.getChildren().add(new Text(s));
+            podium.getChildren().clear();
+            for (String name : names) {
+                Text t = new Text(name);
+                t.setStyle("-fx-font-size: 30px;");
+                t.setStyle("-fx-font-weight: bold;");
+                t.setStyle("-fx-font-color: #ffffff;");
+                podium.getChildren().add(t);
             }
         });
+    }
+
+    public void podiumRequest() throws IOException {
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "PodiumRequest");
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
+        out.println(s);
     }
 
 }

@@ -23,7 +23,6 @@ public class Server implements Runnable {
     private final ExecutorService pool = Executors.newFixedThreadPool(10);
     private final List<Player> playersList = new ArrayList<>();
     private final List<Player> readyPlayers = new ArrayList<>();
-    private final List<Player> leaderboard = new ArrayList<>();
     private final List<Player> alivePlayers = new ArrayList<>();
     private final List<Player> podium = new ArrayList<>();
 
@@ -118,14 +117,14 @@ public class Server implements Runnable {
         }
     }
 
-    public void showLeaderboard() throws IOException {
+    public void updatePodium() throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "Alive");
         List<String> names = new ArrayList<>();
-        map.put("message", "Leaderboard");
-        for (Player p : leaderboard) {
-            names.add(p.getName() + "#" + p.getId());
+        for (int i=0; i<alivePlayers.size(); i++) {
+            names.add(alivePlayers.get(i).getName() + "#" + alivePlayers.get(i).getId() + "\n");
         }
-        map.put("list", names);
+        map.put("names", names);   
         Gson gson = new Gson();
         String s = gson.toJson(map);
         for (ClientHandler client : clients) {
@@ -148,56 +147,25 @@ public class Server implements Runnable {
         }
     }
 
-    public void updatePlayerStats(int score, int health, Player player) throws IOException {
-        for (Player p : readyPlayers) {
-            if (p == player) {
-                p.setScore(score);
-                p.setHealth(health);
-                break;
-            }
-        }
-        // update leaderboard :
-        for (Player p : leaderboard) {
-            leaderboard.remove(p);
-        }
-        ArrayList<Player> copy = new ArrayList<>();
-        for (int j=0; j<readyPlayers.size(); j++) 
-            copy.add(readyPlayers.get(j));
-        int i = this.readyPlayers.size();
-        while (i > 0) {
-            Player p = getBestPlayer(copy);
-            this.leaderboard.add(p);
-            copy.remove(p);
-            i--;
-        }
-    }
-
-    private static Player getBestPlayer(List<Player> players) {
-        Player res = null;
-        int max = -1;
-        for (int i=0; i<players.size(); i++) {
-            if (players.get(i).getScore() > max) {
-                max = players.get(i).getScore();
-                res = players.get(i);
-            }
-        }
-        return res;
-    } 
-
     public void killPlayer(Player player) throws IOException {
         alivePlayers.remove(player);
         player.kill();
         podium.add(player);
         if (alivePlayers.size() == 1) {
+            System.out.println("\n[SERVER] GAME ENDED");
             podium.add(alivePlayers.get(0));
             Collections.reverse(podium);
-            // showPodium();
+            for (ClientHandler c : clients) {
+                disconnect(c);
+            }
             // alivePlayers.get(0).win();
+            // showPodium();
             // endGame();
         }
     }
 
     public boolean checkIfEveryoneIsReady() {
+        if (readyPlayers.size() <= 1) return false;
         int n = playersList.size();
         if (n != readyPlayers.size()) return false;
         int acc = 0;
