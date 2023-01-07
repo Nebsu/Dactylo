@@ -2,9 +2,11 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -32,6 +34,10 @@ public class Multi extends Game {
     @FXML private TextFlow textFlow = new TextFlow();
     @FXML private TextFlow podium = new TextFlow();
     @FXML private Label title = new Label();
+    @FXML private TextFlow results;
+    @FXML private Button restart;
+    @FXML private GridPane multi;
+    @FXML private GridPane endgame;
 
     // Set the game, loads data and displays it, input listener
     public void initialize() {
@@ -264,6 +270,30 @@ public class Multi extends Game {
         String s = gson.toJson(map);
         PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
         out.println(s);
+    }
+
+    public void endGame(List<String> podium) {
+        this.multi.setVisible(false);
+        this.endgame.setVisible(true);
+        this.drawResults(podium);
+    }
+
+    public void drawResults(List<String> names) {
+        Platform.runLater(() -> {
+            results.getChildren().clear();
+            for (String name : names) {
+                Text t = new Text(name);
+                t.setStyle("-fx-font-size: 30px;");
+                t.setStyle("-fx-font-weight: bold;");
+                t.setStyle("-fx-font-color: #ffffff;");
+                results.getChildren().add(t);
+            }
+        });
+    }
+
+    public void restart_game() {
+        // TODO
+        return;
     }
 
 }

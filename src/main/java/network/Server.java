@@ -106,7 +106,7 @@ public class Server implements Runnable {
         List<String> names = new ArrayList<>();
         map.put("message", "PlayersList");
         for (Player p : playersList) {
-            names.add(p.getName() + "#" + p.getId());
+            names.add(p.getName() + " #" + p.getId());
         }
         map.put("list", names);
         Gson gson = new Gson();
@@ -122,7 +122,7 @@ public class Server implements Runnable {
         map.put("message", "Alive");
         List<String> names = new ArrayList<>();
         for (int i=0; i<alivePlayers.size(); i++) {
-            names.add(alivePlayers.get(i).getName() + "#" + alivePlayers.get(i).getId() + "\n");
+            names.add(alivePlayers.get(i).getName() + " #" + alivePlayers.get(i).getId() + "\n");
         }
         map.put("names", names);   
         Gson gson = new Gson();
@@ -155,12 +155,44 @@ public class Server implements Runnable {
             System.out.println("\n[SERVER] GAME ENDED");
             podium.add(alivePlayers.get(0));
             Collections.reverse(podium);
+            try {
+                // show end creen and final podium :
+                this.endGame();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("IO Exception Server");
+            }
+        }
+    }
+
+    private void endGame() throws IOException {
+        // Signal for end screen :
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "End");
+        List<String> names = new ArrayList<>();
+        for (int i=0; i<podium.size(); i++) {
+            names.add("#" + (i+1) + " " + podium.get(i).getName() + "\n");
+        }
+        map.put("podium", names);
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        for (ClientHandler client : clients) {
+            PrintWriter out = new PrintWriter(client.getSocket().getOutputStream(), true);
+            out.println(s);
+        }
+    }
+
+    public void shutdown() {
+        try {
+            this.running = false;
             for (ClientHandler c : clients) {
                 disconnect(c);
             }
-            // alivePlayers.get(0).win();
-            // showPodium();
-            // endGame();
+            this.pool.shutdown();
+            this.ss.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("IO Exception Server");
         }
     }
 

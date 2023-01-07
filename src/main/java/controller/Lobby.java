@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
@@ -109,6 +112,19 @@ public class Lobby {
             io.printStackTrace();
             System.err.println("Lobby IOException");
         }
+    }
+
+    public void drawNames(List<String> playersNamesList) {
+        Platform.runLater(() -> {
+            this.getVbox().getChildren().clear();
+            for (String name : playersNamesList) {
+                Text t = new Text(name);
+                t.setStyle("-fx-font-size: 30px;");
+                t.setStyle("-fx-font-weight: bold;");
+                t.setStyle("-fx-font-color: #ffffff;");
+                this.getVbox().getChildren().add(t);
+            }
+        });
     }
 
 }

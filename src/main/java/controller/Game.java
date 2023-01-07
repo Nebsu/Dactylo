@@ -33,8 +33,9 @@ public class Game {
     @FXML
     private Label text = new Label();
     @FXML
-    private Scene scene;
-    private Stage stage;
+    protected Scene scene;
+    @FXML
+    protected Stage stage;
     @FXML
     private TextField input = new TextField();
 
