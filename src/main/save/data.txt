@@ -1,9 +1,1 @@
-default:false
-health:13
-score:553
-wordCount:9
-level:6
-username:Player
-difficulty:src/main/dictionary/easy.txt
-maxWords:15
-words:practice,m;energy,m;candidate,m;through,b;morning,n;himself,m;film,n;
+default:true

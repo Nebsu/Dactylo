@@ -209,6 +209,26 @@ public class Solo extends Game {
         });
     }
 
+    public boolean gameOver(){
+        if (health <= 0) {
+            addLeaderboard();
+            getWords().clear();
+            getInput().setDisable(true);
+            getInput().setEditable(false);
+            setGamestate(false);
+            timer.cancel();
+            timer.purge();
+            Text text = new Text("Your reached level " + level + " and typed " + wordCount + " words!");
+            text.setTranslateY(7);
+            text.setFont(javafx.scene.text.Font.font("System", 20));
+            text.setFill(Color.web("#383734"));
+            textFlow.getChildren().clear();
+            textFlow.getChildren().add(text);
+            return true;
+        }
+        return false;
+    }
+
     // Start the game loop
     public void timerStart(){
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -224,22 +244,16 @@ public class Solo extends Game {
                             getInput().clear();
                             healthlbl.setText("" + health);
                         }
-                        if (health <= 0) {
-                            //Game Over
-                            //Add score to leaderboard
-                            addLeaderboard();
-                            getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
-                            getWords().clear();
-                            getInput().setDisable(true);
-                            setGamestate(false);
-                            reset();
-                            timer.cancel();
-                            timer.purge();
+                        //Check health
+                        if(gameOver() == true){
+                            return;
                         }
                     }
-                    getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
-                    displayList();
-                    wordsLeft.setText("" + getWords().size());
+                    if (health > 0){
+                        getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
+                        displayList();
+                        wordsLeft.setText("" + getWords().size());
+                    }
                 });
             }
         }, 0, (int)interval*1000);
@@ -293,22 +307,21 @@ public class Solo extends Game {
 
     // Do the action when the user presses space
     public void checkWord(KeyEvent event) {
-        if (getGamestate() == false && event.getCode() != KeyCode.SPACE) {
+        if (getGamestate() == false) {
             setGamestate(true);
             timer = new Timer();
             timerStart();
         }
         if (event.getCode() == KeyCode.SPACE && getGamestate()) {
             String word = getInput().getText();
+            // Check if the word is correct
             if (!getWords().get(0).toString().equals(word)) {
                 //If the word is incorrect lose the difference between the two words in health
                 health -= compareWords(getWords().get(0).toString(), word);
                 healthlbl.setText(""+health);
-                if (health <= 0) {
-                    //Game Over
-                    timer.cancel();
-                    timer.purge();
-                    getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
+                //Check health
+                if(gameOver() == true){
+                    return;
                 }
             } else {
                 score += word.length();
@@ -319,6 +332,7 @@ public class Solo extends Game {
                 }
             }
             wordCount++;
+            // Check level up
             if (wordCount == Global.WORDS_TO_LEVEL_UP) {
                 //Level up + increase speed
                 wordCount = 0;
@@ -327,7 +341,6 @@ public class Solo extends Game {
                 levellbl.setText(""+level);
                 interval = 3*Math.pow(0.9, level);
             }
-            getWords().remove(0);
             if (getWords().size() < GameSettings.getWords_max_length()/2) {
                 //If the list is too short add more words
                 getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
@@ -337,9 +350,11 @@ public class Solo extends Game {
             getInput().setStyle("-fx-text-fill: #383734");
             //refresh the text
             isNewWord = true;
-            displayList();
-            getInput().clear();
-        } else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE) {
+            if (health > 0){
+                getWords().remove(0);
+                getInput().clear();
+                displayList();
+            }
             if (isNewWord) {
                 //If the user is typing a new word, clear the text
                 getInput().clear();

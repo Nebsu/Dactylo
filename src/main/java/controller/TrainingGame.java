@@ -162,7 +162,7 @@ public class TrainingGame extends Game {
 
     // when space is pressed, check if the word is in the list
     public void checkWord(KeyEvent event) {
-        if (getGamestate() == false && event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.ESCAPE) {
+        if (getGamestate() == false) {
             setGamestate(true);
             timer = new Timer();
             timerStart();
@@ -171,7 +171,6 @@ public class TrainingGame extends Game {
             String word = getInput().getText();
             if (!getWords().get(0).toString().equals(word)) errorcounter += getWords().get(0).toString().length();
             hitcounter++;
-            getInput().setStyle("-fx-text-fill: #383734");
             getWords().remove(0);
             getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
             //refresh the text

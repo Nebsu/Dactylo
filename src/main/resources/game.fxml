@@ -116,7 +116,7 @@
                <children>
                   <HBox layoutX="2.0" layoutY="9.0" prefHeight="112.0" prefWidth="99.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#back" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="BACK">
+                        <Button focusTraversable="false" mnemonicParsing="false" onAction="#back" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="BACK">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -124,7 +124,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#changeGame" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="SOLO">
+                        <Button focusTraversable="false" mnemonicParsing="false" onAction="#changeGame" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #e76f51;" text="SOLO">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -147,7 +147,7 @@
             </HBox>
             <Pane prefHeight="0.0" prefWidth="0.0" GridPane.columnIndex="2">
                <children>
-                  <Button layoutX="40.0" layoutY="8.0" mnemonicParsing="false" onAction="#reset" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="RESET">
+                  <Button focusTraversable="false" layoutX="40.0" layoutY="8.0" mnemonicParsing="false" onAction="#reset" prefHeight="29.0" prefWidth="51.0" style="-fx-background-color: #95d5b2;" text="RESET">
                      <font>
                         <Font size="10.0" />
                      </font>
