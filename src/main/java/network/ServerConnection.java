@@ -29,6 +29,7 @@ public class ServerConnection implements Runnable {
     }
 
     public Socket getSocket() {return this.socket;}
+    public Lobby getLobby() {return this.lobby;}
     public void setMulti(Multi m) {multi = m;}
 
     @Override
@@ -51,8 +52,6 @@ public class ServerConnection implements Runnable {
                             System.err.println("ServerConnection IOException");
                         }
                     });
-                } else if (message.equals("Disconnect")) {
-                    break;
                 } else if (message.equals("GetWord")) {
                     String word = (String) map.get("word");
                     System.out.println(word);
@@ -63,6 +62,8 @@ public class ServerConnection implements Runnable {
                 } else if (message.equalsIgnoreCase("End")) {  
                     List<String> results = (List<String>) map.get("podium");
                     multi.endGame(results);
+                } else if (message.equals("Replay")) {
+                    multi.replay();
                 }
             }
         } catch (IOException e) {
@@ -72,7 +73,7 @@ public class ServerConnection implements Runnable {
             try {
                 in.close();
                 this.socket.close();
-                Thread.interrupted();
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("ServerConnection IOException");

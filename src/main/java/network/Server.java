@@ -19,6 +19,7 @@ public class Server implements Runnable {
     public static final Server SERVER = initServer(SERVER_PORT);
     private final ServerSocket ss;
     private boolean running = false;
+    private boolean inGame = false;
     private final List<ClientHandler> clients = new ArrayList<>();
     private final ExecutorService pool = Executors.newFixedThreadPool(10);
     private final List<Player> playersList = new ArrayList<>();
@@ -57,15 +58,6 @@ public class Server implements Runnable {
         readyPlayers.add(p);
     }
 
-    public void removePlayer(Player p) {
-        for (Player player : playersList) {
-            if (player.equals(p)) {
-                playersList.remove(player);
-                break;
-            }
-        }
-    }
-
     @Override
     public void run() {
         this.running = true;
@@ -75,6 +67,18 @@ public class Server implements Runnable {
             try {
                 System.out.println("[SERVER] Waiting for a client connection ...");
                 Socket s = ss.accept();
+                if (inGame) {
+                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                    out.println("[SERVER] You are not allowed to join !\nGame is already started");
+                    s.close();
+                    continue;
+                }
+                if (clients.size() == 10) {
+                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                    out.println("[SERVER] You are not allowed to join !\nServer is full");
+                    s.close();
+                    continue;
+                }
                 ClientHandler client = new ClientHandler(s, clients.size() + 1);
                 clients.add(client);
                 System.out.println("[SERVER] Client " + client.getId() + " connected");
@@ -86,10 +90,11 @@ public class Server implements Runnable {
         }
     }
 
-    public void runMultiplayerGame() throws IOException {
+    public void runMultiplayerGame(boolean isReplay) throws IOException {
         System.out.println("\n[SERVER] MULTIPLAYER GAME STARTED");
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-        map.put("message", "Begin");
+        if (!isReplay) map.put("message", "Begin");
+        else map.put("message", "Replay");
         Gson gson = new Gson();
         String s = gson.toJson(map);
         for (ClientHandler client : clients) {
@@ -99,6 +104,8 @@ public class Server implements Runnable {
         for (Player p : readyPlayers) {
             alivePlayers.add(p);
         }
+        this.inGame = true;
+        this.podium.clear();
     }
 
     public void showToEveryone() throws IOException {
@@ -106,7 +113,7 @@ public class Server implements Runnable {
         List<String> names = new ArrayList<>();
         map.put("message", "PlayersList");
         for (Player p : playersList) {
-            names.add(p.getName() + " #" + p.getId());
+            names.add(p.getName() + p.getId()+"\n\n");
         }
         map.put("list", names);
         Gson gson = new Gson();
@@ -122,7 +129,7 @@ public class Server implements Runnable {
         map.put("message", "Alive");
         List<String> names = new ArrayList<>();
         for (int i=0; i<alivePlayers.size(); i++) {
-            names.add(alivePlayers.get(i).getName() + " #" + alivePlayers.get(i).getId() + "\n");
+            names.add(alivePlayers.get(i).getName() + alivePlayers.get(i).getId() + "\n");
         }
         map.put("names", names);   
         Gson gson = new Gson();
@@ -171,7 +178,7 @@ public class Server implements Runnable {
         map.put("message", "End");
         List<String> names = new ArrayList<>();
         for (int i=0; i<podium.size(); i++) {
-            names.add("#" + (i+1) + " " + podium.get(i).getName() + "\n");
+            names.add("#" + (i+1) + " " + podium.get(i).getName() + podium.get(i).getId() + "\n\n");
         }
         map.put("podium", names);
         Gson gson = new Gson();
@@ -180,14 +187,14 @@ public class Server implements Runnable {
             PrintWriter out = new PrintWriter(client.getSocket().getOutputStream(), true);
             out.println(s);
         }
+        inGame = false;
+        readyPlayers.clear();
+        alivePlayers.clear();
     }
 
     public void shutdown() {
         try {
             this.running = false;
-            for (ClientHandler c : clients) {
-                disconnect(c);
-            }
             this.pool.shutdown();
             this.ss.close();
         } catch (IOException e) {
@@ -205,20 +212,6 @@ public class Server implements Runnable {
             if (readyPlayers.contains(playersList.get(i))) acc++;
         }
         return acc == n;
-    }
-
-    public void disconnect(ClientHandler cl) throws IOException {
-        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-        map.put("message", "Disconnect");
-        Gson gson = new Gson();
-        String s = gson.toJson(map);
-        for (ClientHandler client : clients) {
-            if (cl == client) {
-                PrintWriter out = new PrintWriter(cl.getSocket().getOutputStream(), true);
-                out.println(s);
-                break;
-            }
-        }
     }
 
     public static void main(String[] args) {

@@ -7,8 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
@@ -30,7 +30,7 @@ public class Lobby {
     @FXML private Stage stage;
     @FXML private Scene scene;
     @FXML private Button ready;
-    @FXML private VBox vbox;
+    @FXML private TextFlow flow;
 
     private Socket socket;
     private PrintWriter out;
@@ -38,7 +38,7 @@ public class Lobby {
     private static boolean visited = false;
     private static ActionEvent start;
 
-    public VBox getVbox() {return vbox;}
+    public static Scene getScene() {return connection.getLobby().scene;}
     public static ServerConnection getConnection() {return connection;}
 
     @FXML
@@ -86,43 +86,15 @@ public class Lobby {
         stage.show();
     }
 
-    public void back(ActionEvent event) throws IOException {
-        this.quitLobby();
-        PLAYER.setReady(false);
-        Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setTitle(Global.GAME_TITLE);
-        stage.setScene(scene);
-        stage.show();
-    }
-    
-    private void quitLobby() {
-        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-        Gson gson = new Gson();
-        map.put("message", "Quit");
-        map.put("pseudo", PLAYER.getName());
-        String message = gson.toJson(map);
-        out.println(message);
-        System.out.println("You quit the online lobby");
-        try {
-            out.close();
-            socket.close();
-        } catch (IOException io) {
-            io.printStackTrace();
-            System.err.println("Lobby IOException");
-        }
-    }
-
     public void drawNames(List<String> playersNamesList) {
         Platform.runLater(() -> {
-            this.getVbox().getChildren().clear();
+            this.flow.getChildren().clear();
             for (String name : playersNamesList) {
                 Text t = new Text(name);
                 t.setStyle("-fx-font-size: 30px;");
                 t.setStyle("-fx-font-weight: bold;");
                 t.setStyle("-fx-font-color: #ffffff;");
-                this.getVbox().getChildren().add(t);
+                this.flow.getChildren().add(t);
             }
         });
     }

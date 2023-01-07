@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,7 +20,6 @@ import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
 import static misc.Global.*;
-import misc.GameSettings;
 import misc.Global;
 import misc.Word;
 
@@ -34,6 +34,7 @@ public class Multi extends Game {
     @FXML private TextFlow textFlow = new TextFlow();
     @FXML private TextFlow podium = new TextFlow();
     @FXML private Label title = new Label();
+    @FXML private Label over = new Label();
     @FXML private TextFlow results;
     @FXML private Button restart;
     @FXML private GridPane multi;
@@ -89,40 +90,6 @@ public class Multi extends Game {
                 text.setFill(Color.web("#383734"));
             }
             textFlow.getChildren().add(text);
-        }
-    }
-
-    // Count the number of lines in the file
-    public int getLineCount() {
-        int lineCount = 1;
-        try {
-            File file = new File(LEADERBOARD_FILE_PATH);
-            FileReader fileReader = new FileReader(file);
-            BufferedReader reader = new BufferedReader(fileReader);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lineCount++;
-            }
-            reader.close();
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lineCount;
-    }
-
-    // Add the score to the leaderboard
-    public void addLeaderboard(){
-        try {
-            File file = new File(LEADERBOARD_FILE_PATH);
-            FileWriter fileWriter = new FileWriter(file, true);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-            writer.write(GameSettings.getUsername() + "-" + score);
-            writer.newLine();
-            writer.close();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -238,9 +205,8 @@ public class Multi extends Game {
     }
 
     public void gameOver() throws IOException {
-        getInput().setEditable(false);
         getInput().setVisible(false);
-        title.setText("GAME OVER !");
+        over.setVisible(true);
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "GameOver");
         Gson gson = new Gson();
@@ -291,9 +257,34 @@ public class Multi extends Game {
         });
     }
 
-    public void restart_game() {
-        // TODO
-        return;
+    public void restart_game(ActionEvent event) throws IOException {
+        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+        map.put("message", "Replay");
+        Gson gson = new Gson();
+        String s = gson.toJson(map);
+        PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
+        out.println(s);
+    }
+
+    public void replay() {
+        this.score = 0;
+        this.health = DEFAULT_HEALTH;
+        try {
+            Thread.sleep(1000);
+            this.podiumRequest();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("InterruptedException Multi");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("IOException Multi"); 
+        }
+        this.multi.setVisible(true);
+        this.endgame.setVisible(false);
+        this.over.setVisible(false);
+        getInput().setVisible(true);
+        getInput().clear();
+        getInput().setEditable(true);
     }
 
 }

@@ -48,12 +48,7 @@ public class ClientHandler implements Runnable {
                     System.out.println("[SERVER] Player"+ this.id + " is ready");
                     SERVER.addReadyPlayer(this.player);
                     if (SERVER.checkIfEveryoneIsReady())
-                        SERVER.runMultiplayerGame();
-                } else if (message.equals("Quit")) {
-                    SERVER.removePlayer(this.player);
-                    SERVER.showToEveryone();
-                    SERVER.disconnect(this);
-                    break;
+                        SERVER.runMultiplayerGame(false);
                 } else if (message.equals("PodiumRequest")) {
                     SERVER.updatePodium();
                 } else if (message.equals("SendWord")) {
@@ -62,6 +57,11 @@ public class ClientHandler implements Runnable {
                     SERVER.sendWordToEveryone(word, this);
                 } else if (message.equals("GameOver")) {
                     SERVER.killPlayer(this.player);
+                } else if (message.equals("Replay")) {
+                    System.out.println("[SERVER] Player"+ this.id + " is ready");
+                    SERVER.addReadyPlayer(this.player);
+                    if (SERVER.checkIfEveryoneIsReady())
+                        SERVER.runMultiplayerGame(true);
                 }
             }
         } catch (SocketException se) {
@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable {
             try {
                 in.close();
                 this.socket.close();
-                Thread.interrupted();
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("IO Exception Client Handler");
