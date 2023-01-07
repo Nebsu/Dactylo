@@ -29,6 +29,9 @@ public class ClientHandler implements Runnable {
     public Socket getSocket() {return this.socket;}
     public int getId() {return this.id;}
  
+    /**
+     * It reads the request from the client, and then depending on the request
+     */
     @Override
     public void run() {
         try {

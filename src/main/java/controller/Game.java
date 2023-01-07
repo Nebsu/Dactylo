@@ -138,6 +138,11 @@ public class Game {
         }
     }
 
+/**
+ * This function takes a string as an argument and sets the text of the TextFlow object to the string.
+ * 
+ * @param newText The text to be displayed in the TextFlow.
+ */
     public void setNewText(String newText) {
         Text text = new Text(newText);
             text.setTranslateY(7);
@@ -147,6 +152,9 @@ public class Game {
             textFlow.getChildren().add(text);
     }
 
+/**
+ * It takes a list of words, and displays them in a TextFlow object
+ */
     public void displayList(){
         textFlow.getChildren().clear();
         textFlow.setTextAlignment(TextAlignment.CENTER);;
@@ -163,6 +171,10 @@ public class Game {
         }
     }
 
+    /**
+     * It takes a list of words, and for each word, it creates a Text object, sets the font, and adds
+     * it to a TextFlow object
+     */
     public void displayMalus(){
         textFlow.getChildren().clear();
         textFlow.setTextAlignment(TextAlignment.CENTER);;

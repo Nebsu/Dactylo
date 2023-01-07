@@ -38,7 +38,10 @@ public class Multi extends Game {
     @FXML private GridPane multi;
     @FXML private GridPane endgame;
 
-    // Set the game, loads data and displays it, input listener
+/**
+ * It sets the color of the textfield, sets a new dictionary, makes a new list, displays the malus,
+ * sets the words left, sets the health, and then it requests the podium
+ */
     public void initialize() {
         Lobby.getConnection().setMulti(this);
         setTextFieldColor();
@@ -72,7 +75,12 @@ public class Multi extends Game {
         }
     }
 
-    // Do the action when the user presses space
+/**
+ * It checks if the user has pressed the space bar, if so, it checks if the word is correct, if not, it
+ * deducts health, if so, it adds score
+ * 
+ * @param event the key event
+ */
     public void checkWord(KeyEvent event) {
         if (getGamestate() == false) {
             setGamestate(true);
@@ -120,6 +128,11 @@ public class Multi extends Game {
         }
     }
 
+/**
+ * It sends a message to the server to send a word to the other player
+ * 
+ * @param word The word that the player has guessed
+ */
     private void sendWord(String word) throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "SendWord");
@@ -130,6 +143,13 @@ public class Multi extends Game {
         out.println(s);
     }
 
+/**
+ * It adds a word to the list of words to type, and if the list is full, it checks if the word typed by
+ * the user is the same as the first word in the list, and if not, it removes the first word in the
+ * list and subtracts the number of letters in the word from the user's health
+ * 
+ * @param word the word to add to the list
+ */
     public void addWordFromUser(String word) {
         Platform.runLater(() -> {
             if(getWords().size() == Global.MAX_LIST_SIZE_MULTI) {
@@ -151,14 +171,17 @@ public class Multi extends Game {
                         System.err.println("IOException Multi");
                     }
                 }
+                getInput().clear();
             }
             getWords().add(new Word(word, 'n'));
             displayMalus();
-            getInput().clear();
             wordsLeft.setText("" + getWords().size());
         });
     }
 
+/**
+ * It sends a message to the server to tell it that the game is over, and then it requests the podium
+ */
     public void gameOver() throws IOException {
         getInput().setVisible(false);
         over.setVisible(true);
@@ -171,6 +194,11 @@ public class Multi extends Game {
         podiumRequest();
     }
 
+/**
+ * It takes a list of names and displays them on the screen
+ * 
+ * @param names List of names to be displayed on the podium
+ */
     public void drawPodium(List<String> names) {
         Platform.runLater(() -> {
             podium.getChildren().clear();
@@ -184,6 +212,9 @@ public class Multi extends Game {
         });
     }
 
+/**
+ * It sends a message to the server
+ */
     public void podiumRequest() throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "PodiumRequest");
@@ -193,12 +224,23 @@ public class Multi extends Game {
         out.println(s);
     }
 
+/**
+ * Changes the state of the game to over, and displays the podium
+ * 
+ * @param podium List of Strings, each String is a player's name
+ */
     public void endGame(List<String> podium) {
         this.multi.setVisible(false);
         this.endgame.setVisible(true);
         this.drawResults(podium);
     }
 
+/**
+ * It takes a list of names, clears the results pane, and then adds a new text element for each name in
+ * the list
+ * 
+ * @param names List of names to be displayed
+ */
     public void drawResults(List<String> names) {
         Platform.runLater(() -> {
             results.getChildren().clear();
@@ -212,6 +254,11 @@ public class Multi extends Game {
         });
     }
 
+/**
+ * It sends a message to the server to restart the game
+ * 
+ * @param event the event that triggered the method
+ */
     public void restart_game(ActionEvent event) throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "Replay");
@@ -221,6 +268,9 @@ public class Multi extends Game {
         out.println(s);
     }
 
+/**
+ * It resets the game to its initial state
+ */
     public void replay() {
         this.score = 0;
         this.health = DEFAULT_HEALTH;

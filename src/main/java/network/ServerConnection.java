@@ -32,6 +32,10 @@ public class ServerConnection implements Runnable {
     public Lobby getLobby() {return this.lobby;}
     public void setMulti(Multi m) {multi = m;}
 
+    /**
+     * It reads a line from the server, parses it with Gson, and then does something depending on the
+     * message
+     */
     @Override
     public void run() {
         try {

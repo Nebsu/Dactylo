@@ -14,7 +14,7 @@ import com.google.gson.internal.LinkedTreeMap;
 
 public class Server implements Runnable {
     
-    private static String SERVER_IP = "192.168.1.19"; // default IP
+    private static String SERVER_IP = "192.168.1.1"; // default IP
     public static final int SERVER_PORT = 4999;
     public static final Server SERVER = initServer(SERVER_PORT);
     private final ServerSocket ss;
@@ -90,6 +90,11 @@ public class Server implements Runnable {
         }
     }
 
+/**
+ * It sends a message to all the clients to start the game
+ * 
+ * @param isReplay boolean
+ */
     public void runMultiplayerGame(boolean isReplay) throws IOException {
         System.out.println("\n[SERVER] MULTIPLAYER GAME STARTED");
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
@@ -108,6 +113,9 @@ public class Server implements Runnable {
         this.podium.clear();
     }
 
+/**
+ * It takes a list of players, converts it to a JSON string, and sends it to all the clients
+ */
     public void showToEveryone() throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         List<String> names = new ArrayList<>();
@@ -124,6 +132,9 @@ public class Server implements Runnable {
         }
     }
 
+/**
+ * It takes a list of players, converts it to a JSON string, and sends it to all the clients
+ */
     public void updatePodium() throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "Alive");
@@ -140,6 +151,12 @@ public class Server implements Runnable {
         }
     }
 
+/**
+ * It sends a word to everyone except the sender
+ * 
+ * @param word the word to send
+ * @param sender the client who sent the word
+ */
     public void sendWordToEveryone(String word, ClientHandler sender) throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "GetWord");
@@ -154,6 +171,12 @@ public class Server implements Runnable {
         }
     }
 
+/**
+ * It removes a player from the list of alive players, adds it to the podium, and if there's only one
+ * player left, it ends the game
+ * 
+ * @param player the player that is being killed
+ */
     public void killPlayer(Player player) throws IOException {
         alivePlayers.remove(player);
         player.kill();
@@ -172,6 +195,10 @@ public class Server implements Runnable {
         }
     }
 
+/**
+ * It sends a message to all the clients that the game has ended, and then clears the list of players
+ * who are ready to play and the list of players who are alive
+ */
     private void endGame() throws IOException {
         // Signal for end screen :
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
@@ -192,6 +219,10 @@ public class Server implements Runnable {
         alivePlayers.clear();
     }
 
+/**
+ * This function is called when the server is shutting down. It sets the running variable to false,
+ * shuts down the thread pool, and closes the server socket
+ */
     public void shutdown() {
         try {
             this.running = false;
@@ -203,6 +234,11 @@ public class Server implements Runnable {
         }
     }
 
+/**
+ * If the number of ready players is less than or equal to one, return false. Otherwise, if the number of
+ * ready players is equal to the number of players, return true.
+ * @return The method returns a boolean value.
+ */
     public boolean checkIfEveryoneIsReady() {
         if (readyPlayers.size() <= 1) return false;
         int n = playersList.size();
