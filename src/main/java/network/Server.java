@@ -14,7 +14,7 @@ import com.google.gson.internal.LinkedTreeMap;
 
 public class Server implements Runnable {
     
-    private static String SERVER_IP = "192.168.1.1"; // default IP
+    private static String SERVER_IP = "kyan.sportday.fr"; // default IP
     public static final int SERVER_PORT = 4999;
     public static final Server SERVER = initServer(SERVER_PORT);
     private final ServerSocket ss;

@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
@@ -43,25 +44,25 @@ public class Lobby {
 
     @FXML
     public void initialize() {
-        while (!visited) {
-            try {
-                this.socket = new Socket(Server.getServerIP(), Server.SERVER_PORT);
-                this.out = new PrintWriter(socket.getOutputStream(), true);
-                connection = new ServerConnection(socket, this);
-                new Thread(connection).start();
-                LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-                Gson gson = new Gson();
-                map.put("message", "Connection");
-                map.put("pseudo", PLAYER.getName());
-                String message = gson.toJson(map);
-                out.println(message);
-                visited = true;
-            } catch (SocketException se) {
-                System.out.println("[CLIENT] Client disconnected");
-            } catch (IOException io) {
-                io.printStackTrace();
-                System.err.println("Lobby IOException");
-            }
+        try {
+            if (visited) return;
+            this.socket = new Socket();
+            socket.connect(new InetSocketAddress(Server.getServerIP(), Server.SERVER_PORT), 15000);
+            this.out = new PrintWriter(socket.getOutputStream(), true);
+            connection = new ServerConnection(socket, this);
+            new Thread(connection).start();
+            LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+            Gson gson = new Gson();
+            map.put("message", "Connection");
+            map.put("pseudo", PLAYER.getName());
+            String message = gson.toJson(map);
+            out.println(message);
+            visited = true;
+        } catch (SocketException se) {
+            System.out.println("[CLIENT] Client disconnected");
+        } catch (IOException io) {
+            io.printStackTrace();
+            System.err.println("Lobby IOException");
         }
     }
 

@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -106,13 +107,21 @@ public class MenuController {
  * 
  * @param event The event that triggered the method.
  */
-    public void switchToScene3(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("../settings.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setTitle(Global.GAME_TITLE);
-        stage.setScene(scene);
-        stage.show();
+    public void switchToScene3(ActionEvent event) {
+        Platform.runLater(() -> {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("../settings.fxml"));
+                stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setTitle(Global.GAME_TITLE);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("IO Exception Menu"); 
+            }
+        });
+ 
     }
 
 }
