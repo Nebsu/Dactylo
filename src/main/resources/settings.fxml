@@ -95,6 +95,23 @@
                         <Insets bottom="70.0" />
                      </VBox.margin>
                   </HBox>
+                  <HBox alignment="CENTER" prefHeight="52.0" prefWidth="600.0">
+                     <children>
+                        <Label alignment="CENTER" text="Server IP" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="18.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="ipTextField" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: #95d5b2;">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <Pane prefHeight="200.0" prefWidth="200.0">

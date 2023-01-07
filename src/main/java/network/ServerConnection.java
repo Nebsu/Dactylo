@@ -1,5 +1,7 @@
 package network;
 
+import javafx.application.Platform;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,17 +10,17 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
-import javafx.application.Platform;
-import javafx.scene.text.Text;
-
 import controller.Lobby;
+import controller.Multi;
+
+@SuppressWarnings("unchecked")
 
 public class ServerConnection implements Runnable {
 
-    private Socket socket;
-    private Lobby lobby;
-    private BufferedReader in;
-    private List<String> playersList;
+    private final Socket socket;
+    private final BufferedReader in;
+    private final Lobby lobby;
+    private Multi multi;
     
     public ServerConnection(Socket socket, Lobby lobby) throws IOException {
         this.socket = socket;
@@ -26,7 +28,9 @@ public class ServerConnection implements Runnable {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public List<String> getPlayersList() {return playersList;}
+    public Socket getSocket() {return this.socket;}
+    public Lobby getLobby() {return this.lobby;}
+    public void setMulti(Multi m) {multi = m;}
 
     @Override
     public void run() {
@@ -36,9 +40,30 @@ public class ServerConnection implements Runnable {
                 Gson gson = new Gson();
                 LinkedTreeMap<String, Object> map = gson.fromJson(request, LinkedTreeMap.class);
                 String message = (String) map.get("message");
-                if (message.equals("playersList")) {
-                    this.playersList = (List<String>) map.get("list");
-                    this.drawNames();
+                if (message.equals("PlayersList")) {
+                    List<String> playersNamesList = (List<String>) map.get("list");
+                    lobby.drawNames(playersNamesList);
+                } else if (message.equals("Begin")) {
+                    Platform.runLater( () -> {
+                        try {
+                            this.lobby.startMulti();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            System.err.println("ServerConnection IOException");
+                        }
+                    });
+                } else if (message.equals("GetWord")) {
+                    String word = (String) map.get("word");
+                    System.out.println(word);
+                    multi.addWordFromUser(word);
+                } else if (message.equals("Alive")) {
+                    List<String> alivePlayers = (List<String>) map.get("names");
+                    multi.drawPodium(alivePlayers);
+                } else if (message.equalsIgnoreCase("End")) {  
+                    List<String> results = (List<String>) map.get("podium");
+                    multi.endGame(results);
+                } else if (message.equals("Replay")) {
+                    multi.replay();
                 }
             }
         } catch (IOException e) {
@@ -48,21 +73,12 @@ public class ServerConnection implements Runnable {
             try {
                 in.close();
                 this.socket.close();
-                Thread.interrupted();
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("ServerConnection IOException");
             }
         }
-    }
-
-    private void drawNames() {
-        Platform.runLater(() -> {
-            lobby.getVbox().getChildren().clear();
-            for (String name : playersList) {
-                lobby.getVbox().getChildren().add(new Text(name));
-            }
-        });
     }
 
 }

@@ -8,11 +8,17 @@ import java.net.SocketException;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
+import misc.Global;
+import static network.Server.SERVER;
+
+@SuppressWarnings("unchecked")
+
 public class ClientHandler implements Runnable {
 
     private Socket socket;
     private int id;
     private BufferedReader in;
+    private Player player;
 
     public ClientHandler(Socket socket, int id) throws IOException {
         this.socket = socket;
@@ -28,19 +34,38 @@ public class ClientHandler implements Runnable {
         try {
             String request;
             while ((request = in.readLine()) != null) {
-                System.out.println("client loop");
                 Gson gson = new Gson();
                 LinkedTreeMap<String, Object> map = gson.fromJson(request, LinkedTreeMap.class);
                 String message = (String) map.get("message");
                 if (message.equals("Connection")) {
-                    String name = (String) map.get("pseudo") + String.valueOf(id);
-                    // System.out.println(name);
-                    Server.addPlayer(name);
-                    Server.showToEveryone();
+                    String name = (String) map.get("pseudo");
+                    this.player = new Player(name, this.id);
+                    Global.PLAYER.setId(this.id);
+                    SERVER.addPlayer(this.player);
+                    SERVER.showToEveryone();
+                } else if (message.equals("Ready")) {
+                    this.player.setReady(true);
+                    System.out.println("[SERVER] Player"+ this.id + " is ready");
+                    SERVER.addReadyPlayer(this.player);
+                    if (SERVER.checkIfEveryoneIsReady())
+                        SERVER.runMultiplayerGame(false);
+                } else if (message.equals("PodiumRequest")) {
+                    SERVER.updatePodium();
+                } else if (message.equals("SendWord")) {
+                    String word = (String) map.get("word");
+                    System.out.println(word);
+                    SERVER.sendWordToEveryone(word, this);
+                } else if (message.equals("GameOver")) {
+                    SERVER.killPlayer(this.player);
+                } else if (message.equals("Replay")) {
+                    System.out.println("[SERVER] Player"+ this.id + " is ready");
+                    SERVER.addReadyPlayer(this.player);
+                    if (SERVER.checkIfEveryoneIsReady())
+                        SERVER.runMultiplayerGame(true);
                 }
             }
         } catch (SocketException se) {
-            System.out.println("Client " + id + " disconnected");
+            System.out.println("[SERVER] Client " + id + " disconnected");
         } catch (IOException e) {
             System.err.println("IO Exception Client Handler");
             System.err.println(e.getStackTrace());
@@ -48,7 +73,7 @@ public class ClientHandler implements Runnable {
             try {
                 in.close();
                 this.socket.close();
-                Thread.interrupted();
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("IO Exception Client Handler");

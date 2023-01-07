@@ -60,3 +60,5 @@ Player@6@1
 Player@3@1
 Player@20@1
 Player@6@1
+Mario@30@1
+Mario@42@1

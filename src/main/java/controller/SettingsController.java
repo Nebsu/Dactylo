@@ -14,20 +14,19 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import misc.Global;
+import network.Server;
 
 public class SettingsController {
 
     private String selectedOption;
     private int selectedOption2;
-    @FXML
-    private Stage stage;
-    private Scene scene;
-    @FXML
-    private ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    @FXML
-    private ChoiceBox<Integer> choiceBox2 = new ChoiceBox<>();
-    @FXML
-    private TextField usernameTa;
+
+    @FXML private Stage stage;
+    @FXML private Scene scene;
+    @FXML private ChoiceBox<String> choiceBox = new ChoiceBox<>();
+    @FXML private ChoiceBox<Integer> choiceBox2 = new ChoiceBox<>();
+    @FXML private TextField usernameTa;
+    @FXML private TextField ipTextField;
 
 /**
  * It sets the text of the text area to the username, and then it adds a listener to the text area so
@@ -47,12 +46,16 @@ public class SettingsController {
             GameSettings.setDifficulty(selectedOption);
             GameSettings.setDifficultyName(selectedOption);
         });
-
         choiceBox2.getItems().addAll(15, 20, 25, 30);
         choiceBox2.setValue(GameSettings.getWords_max_length());
         choiceBox2.setOnAction(event -> {
             selectedOption2 = choiceBox2.getValue();
             GameSettings.setWords_max_length(selectedOption2);
+        });
+        ipTextField.setText(Server.getServerIP());
+        ipTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            Server.setServerIP(newValue);
+            ipTextField.setText(newValue);
         });
     }
 
