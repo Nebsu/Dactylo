@@ -29,6 +29,10 @@ public class SettingsController {
     @FXML
     private TextField usernameTa;
 
+/**
+ * It sets the text of the text area to the username, and then it adds a listener to the text area so
+ * that when the text is changed, the username is changed to the new text
+ */
     @FXML
     public void initialize() {
         usernameTa.setText(GameSettings.getUsername());
@@ -52,6 +56,11 @@ public class SettingsController {
         });
     }
 
+/**
+ * It loads the menu.fxml file and sets the scene to the menu.fxml file
+ * 
+ * @param event The event that triggered the method.
+ */
     public void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -61,6 +70,11 @@ public class SettingsController {
         stage.show();
     }
 
+/**
+ * It switches the scene to the leaderboard.fxml file
+ * 
+ * @param event The event that triggered the method.
+ */
     public void switchToLeaderboard(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../leaderboard.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();

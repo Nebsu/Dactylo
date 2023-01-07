@@ -38,6 +38,10 @@ public class LeaderboardController {
     private Stage stage;
     private Scene scene;
 
+/**
+ * It reads a file, splits the lines into parts, creates a new LeaderboardData object with the parts,
+ * adds the object to an ObservableList, sorts the list, and sets the list as the items of a ListView
+ */
     public void loadLeaderboard() {
         try {
             File file = new File(LEADERBOARD_FILE_PATH);
@@ -59,6 +63,10 @@ public class LeaderboardController {
         }
     }
 
+/**
+ * It sets the cell value factory for each column to the corresponding property in the LeaderboardEntry
+ * class
+ */
     @FXML
     public void initialize() {
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
@@ -67,6 +75,11 @@ public class LeaderboardController {
         loadLeaderboard();
     }
 
+/**
+ * It loads the settings.fxml file and sets the scene to the settings.fxml file
+ * 
+ * @param event The event that triggered the method.
+ */
     public void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../settings.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -76,6 +89,9 @@ public class LeaderboardController {
         stage.show();
     }
 
+/**
+ * It's a class that holds the data for a single row in the leaderboard table
+ */
     class LeaderboardData {
 
         private String username;

@@ -9,6 +9,12 @@ import misc.Global;
 
 public class Dactylo extends Application {
     
+/**
+ * It loads the menu.fxml file, sets the title of the window, shows the window, sets the scene, and
+ * sets the window to be always on top
+ * 
+ * @param stage The stage that will be displayed
+ */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Dactylo.class.getResource("menu.fxml"));

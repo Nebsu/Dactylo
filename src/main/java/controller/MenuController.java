@@ -29,10 +29,18 @@ public class MenuController {
     private Stage stage;
 
 
+/**
+ * When the user clicks the button, the program will exit.
+ */
     public void click(){
         System.exit(0);
     }
 
+/**
+ * If the mouse is hovering over a button, change the color of the button
+ * 
+ * @param event The event that triggered the handler.
+ */
     @FXML
     public void handleButtonHover(MouseEvent event){
         if(event.getSource() == solobutton) {
@@ -46,6 +54,12 @@ public class MenuController {
         }
     }
 
+/**
+ * When the mouse leaves a button, the button's color changes to the color it was before the mouse
+ * entered it
+ * 
+ * @param event The event that triggered the handler.
+ */
     @FXML
     public void handleButtonLeave(MouseEvent event){
         if(event.getSource() == solobutton) {
@@ -59,7 +73,11 @@ public class MenuController {
         }
     }
 
-    // Solo game
+/**
+ * It loads the game.fxml file and sets the scene to the game.fxml file
+ * 
+ * @param event The event that triggered the method.
+ */
     public void switchToScene1(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../game.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -69,7 +87,11 @@ public class MenuController {
         stage.show();
     }
 
-    // Multiplayer game
+/**
+ * It loads the lobby.fxml file and sets the scene to the lobby.fxml file
+ * 
+ * @param event The event that triggered the method.
+ */
     public void switchToScene2(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../lobby.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -79,7 +101,11 @@ public class MenuController {
         stage.show();
     }
 
-    // Settings
+/**
+ * It loads the settings.fxml file and sets the scene to the settings.fxml file
+ * 
+ * @param event The event that triggered the method.
+ */
     public void switchToScene3(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../settings.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();

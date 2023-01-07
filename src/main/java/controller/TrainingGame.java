@@ -46,6 +46,10 @@ public class TrainingGame extends Game {
     private Scene scene;
     private Stage stage;
 
+    /**
+     * When the user types in the textfield, the program checks if the character is correct or not. If
+     * it is correct, it increments the utilcharcounter. If it is wrong, it increments the errorcounter
+     */
     @FXML
     public void initialize() {
         setTextFieldColor();
@@ -71,7 +75,12 @@ public class TrainingGame extends Game {
             }
         });
     }
-    // Change game mode to training
+
+    /**
+     * It changes the scene to the solo.fxml scene
+     * 
+     * @param event The event that triggered the method.
+     */
     @Override
     public void changeGame(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../solo.fxml"));
@@ -82,7 +91,10 @@ public class TrainingGame extends Game {
         stage.show();
     }
 
-    //Game loop
+/**
+ * It's a timer that counts down from 60 seconds and when it reaches 0, it stops the game and
+ * calculates the score
+ */
     public void timerStart(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -114,10 +126,18 @@ public class TrainingGame extends Game {
         }, 0, 1000);
     }
 
+/**
+ * It takes the number of characters typed and divides it by 5 to get the words per minute
+ */
     public void setWpm(){
         wpm.setText("" + df.format((float)utilcharcounter / 5));
     }
 
+/**
+ * It takes the number of characters typed, divides it by 5 to get the number of words typed, subtracts
+ * the number of errors from that number, divides the result by the number of words typed, multiplies
+ * the result by 100, and then sets the text of the accuracy TextView to the result
+ */
     public void setAccuracy(){
         float grossWPM = (float)utilcharcounter / 5;
         float netWPM = grossWPM - (float)errorcounter / 5;
@@ -141,6 +161,9 @@ public class TrainingGame extends Game {
         regularity.setText("" + df.format(res));
     }
 
+/**
+ * It resets the game
+ */
     public void reset(){
         countdown = 60;
         hitcounter = 0;
@@ -160,7 +183,15 @@ public class TrainingGame extends Game {
         getText().setText(String.join(" ", getWords().toString().replaceAll("[\\[\\],]", "")));
     }
 
-    // when space is pressed, check if the word is in the list
+
+/**
+ * It checks if the user has pressed the space bar, if so, it checks if the word is correct, if not, it
+ * adds the length of the word to the error counter, if so, it adds one to the hit counter, removes the
+ * first word from the list and adds a new random word to the end of the list, then it refreshes the
+ * text and clears the input field
+ * 
+ * @param event the key event that is triggered when a key is pressed
+ */
     public void checkWord(KeyEvent event) {
         if (getGamestate() == false) {
             setGamestate(true);

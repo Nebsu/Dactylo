@@ -2,7 +2,6 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -42,7 +41,10 @@ public class Solo extends Game {
     @FXML
     private TextFlow textFlow = new TextFlow();
 
-    // Display the words with the right color
+    
+/**
+ * It takes a list of words, and displays them in a TextFlow object with the correct color.(￣▽￣)ノ
+ */
     public void displayList(){
         textFlow.getChildren().clear();
         textFlow.setTextAlignment(TextAlignment.CENTER);;
@@ -59,7 +61,10 @@ public class Solo extends Game {
         }
     }
 
-    // Saves the game
+
+/**
+ * It writes the data to a file
+ */
     public void saveData() {
         try {
             File file = new File(FILE_PATH);
@@ -93,7 +98,9 @@ public class Solo extends Game {
         }
     }
 
-    // Read data from file and sets variables accordingly
+/**
+ * It reads a file and loads the data into the game
+ */
     public void loadData() {
         try {
             File file = new File(FILE_PATH);
@@ -147,7 +154,9 @@ public class Solo extends Game {
         }
     }
 
-    // Clear the file and put the default content
+/**
+ * It clears the file and writes "default:true" to it
+ */
     public void clearFile() {
         try {
             File file = new File(FILE_PATH);
@@ -163,7 +172,9 @@ public class Solo extends Game {
         }
     }
 
-    // Add the score to the leaderboard
+/**
+ * It takes the username, score, and level from the game and writes it to a file
+ */
     public void addLeaderboard(){
         try {
             File file = new File(LEADERBOARD_FILE_PATH);
@@ -178,7 +189,10 @@ public class Solo extends Game {
         }
     }
 
-    // Set the game, loads data and displays it, input listener
+/**
+ * It sets the text field color, sets a new dictionary, loads the data, sets the word count, words
+ * left, health, and level labels, and adds a listener to the text field.
+ */
     public void initialize() {
         setTextFieldColor();
         setNewDictionary();
@@ -209,6 +223,13 @@ public class Solo extends Game {
         });
     }
 
+/**
+ * If the player's health is less than or equal to 0, add the player's score to the leaderboard, clear
+ * the words from the screen, disable the input field, set the game state to false, cancel the timer,
+ * and display a message to the player
+ * 
+ * @return The boolean value of the if statement.
+ */
     public boolean gameOver(){
         if (health <= 0) {
             addLeaderboard();
@@ -229,7 +250,11 @@ public class Solo extends Game {
         return false;
     }
 
-    // Start the game loop
+/**
+ * It starts a timer that adds a word to the list every interval seconds, and if the list is full, it
+ * checks if the user input is the same as the first word in the list. If it is, it removes the first
+ * word in the list, if it isn't, it removes the first word in the list and subtracts health
+ */
     public void timerStart(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -259,7 +284,9 @@ public class Solo extends Game {
         }, 0, (int)interval*1000);
     }
 
-    // Reset the game
+/**
+ * It resets the game to its default state
+ */
     public void reset(){
         clearFile();
         score = 0;
@@ -284,7 +311,13 @@ public class Solo extends Game {
         }
     }
 
-    // Return number of difference between two words with different length
+/**
+ * It compares two words and returns the number of differences between them
+ * 
+ * @param word1 The first word to compare
+ * @param word2 the word that you want to compare to
+ * @return The difference between the two words.
+ */
     public int compareWords(String word1, String word2){
         int difference = 0;
         if(word1.length() > word2.length()){
@@ -305,7 +338,13 @@ public class Solo extends Game {
         return difference;
     }
 
-    // Do the action when the user presses space
+/**
+ * It checks if the user has pressed the space bar, if so it checks if the word is correct, if not it
+ * subtracts the difference between the two words from the health, if so it adds the length of the word
+ * to the score
+ * 
+ * @param event The key event that is triggered when the user presses a key
+ */
     public void checkWord(KeyEvent event) {
         if (getGamestate() == false) {
             setGamestate(true);

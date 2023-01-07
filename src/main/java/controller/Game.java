@@ -60,6 +60,9 @@ public class Game {
 
     public void setGamestate(boolean gamestate) { this.gamestate = gamestate; }
 
+/**
+ * It sets the background color of the text field
+ */
     public void setTextFieldColor(){
         Color color = Color.web("#95d5b2");
         BackgroundFill background_fill = new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY);
@@ -67,6 +70,11 @@ public class Game {
         getInput().setBackground(background);
     }
 
+/**
+ * It loads the menu.fxml file and sets it as the current scene
+ * 
+ * @param event The event that triggered the method.
+ */
     public void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -76,6 +84,11 @@ public class Game {
         stage.show();
     }
 
+/**
+ * It changes the scene to the game scene
+ * 
+ * @param event The event that triggered the method.
+ */
     public void changeGame(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../game.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -85,6 +98,9 @@ public class Game {
         stage.show();
     }
 
+/**
+ * It generates a random word from the dictionary, and adds it to the list of words
+ */
     public void remakeList() {
         words.clear();
         Stream<Word> stream;
@@ -99,6 +115,9 @@ public class Game {
         });
     }
 
+/**
+ * It reads a file and adds each line to a list
+ */
     public void setNewDictionary(){
         try {
             dictionary.clear();
