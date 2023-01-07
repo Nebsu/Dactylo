@@ -163,35 +163,14 @@ public class Solo extends Game {
         }
     }
 
-    // Count the number of lines in the file
-    public int getLineCount() {
-        int lineCount = 1;
-        try {
-            File file = new File(LEADERBOARD_FILE_PATH);
-            FileReader fileReader = new FileReader(file);
-            BufferedReader reader = new BufferedReader(fileReader);
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lineCount++;
-            }
-            reader.close();
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lineCount;
-    }
-
     // Add the score to the leaderboard
     public void addLeaderboard(){
         try {
             File file = new File(LEADERBOARD_FILE_PATH);
             FileWriter fileWriter = new FileWriter(file, true);
             BufferedWriter writer = new BufferedWriter(fileWriter);
-            writer.write(GameSettings.getUsername() + "-" + score + "-"+ level);
+            writer.write(GameSettings.getUsername() + "@" + score + "@"+ level);
             writer.newLine();
-
             writer.close();
             fileWriter.close();
         } catch (IOException e) {
@@ -215,12 +194,15 @@ public class Solo extends Game {
             if (!getWords().isEmpty()) {
                 if (newValue.length() <= getWords().get(0).toString().length()) {
                     if (!newValue.equals(getWords().get(0).toString().substring(0, newValue.length()))) {
+                        // If the input is wrong
                         if (!newValue.equals(" "))
                         getInput().setStyle("-fx-text-fill: #e83e3e;");
                     } else {
+                        // If the input is correct
                         getInput().setStyle("-fx-text-fill: #383734;");
                     }
                 } else {
+                    // If the input is longer than the word
                     getInput().setStyle("-fx-text-fill: #e83e3e;");
                 }
             }
@@ -243,6 +225,9 @@ public class Solo extends Game {
                             healthlbl.setText("" + health);
                         }
                         if (health <= 0) {
+                            //Game Over
+                            //Add score to leaderboard
+                            addLeaderboard();
                             getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
                             getWords().clear();
                             getInput().setDisable(true);
@@ -254,7 +239,6 @@ public class Solo extends Game {
                     }
                     getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
                     displayList();
-
                     wordsLeft.setText("" + getWords().size());
                 });
             }
@@ -263,7 +247,6 @@ public class Solo extends Game {
 
     // Reset the game
     public void reset(){
-        addLeaderboard();
         clearFile();
         score = 0;
         health = DEFAULT_HEALTH;
@@ -318,9 +301,11 @@ public class Solo extends Game {
         if (event.getCode() == KeyCode.SPACE && getGamestate()) {
             String word = getInput().getText();
             if (!getWords().get(0).toString().equals(word)) {
+                //If the word is incorrect lose the difference between the two words in health
                 health -= compareWords(getWords().get(0).toString(), word);
                 healthlbl.setText(""+health);
                 if (health <= 0) {
+                    //Game Over
                     timer.cancel();
                     timer.purge();
                     getText().setText("Your reached level " + level + " and typed " + wordCount + " words!");
@@ -328,12 +313,14 @@ public class Solo extends Game {
             } else {
                 score += word.length();
                 if (getWords().get(0).getType() == 'b') {
+                    //If the word is a bonus word
                     health += word.length();
                     healthlbl.setText("" + health);
                 }
             }
             wordCount++;
             if (wordCount == Global.WORDS_TO_LEVEL_UP) {
+                //Level up + increase speed
                 wordCount = 0;
                 wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP));
                 level++;
@@ -342,6 +329,7 @@ public class Solo extends Game {
             }
             getWords().remove(0);
             if (getWords().size() < GameSettings.getWords_max_length()/2) {
+                //If the list is too short add more words
                 getWords().add(getDictionary().get(new Random().nextInt(getDictionary().size())));
             }
             wordCountlbl.setText(""+ (Global.WORDS_TO_LEVEL_UP - wordCount));
@@ -353,6 +341,7 @@ public class Solo extends Game {
             getInput().clear();
         } else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE) {
             if (isNewWord) {
+                //If the user is typing a new word, clear the text
                 getInput().clear();
                 isNewWord = false;
             }

@@ -46,9 +46,8 @@ public class LeaderboardController {
             String line;
             ObservableList<LeaderboardData> data = FXCollections.observableArrayList();
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("-");
+                String[] parts = line.split("@");
                 LeaderboardData lbData = new LeaderboardData(parts[0], Integer.parseInt(parts[2]), Integer.parseInt(parts[1]));
-                System.out.println(lbData);
                 data.add(lbData);
             }
             Collections.sort(data, (o1, o2) -> o2.getScore() - o1.getScore());

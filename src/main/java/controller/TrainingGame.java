@@ -71,7 +71,7 @@ public class TrainingGame extends Game {
             }
         });
     }
-
+    // Change game mode to training
     @Override
     public void changeGame(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../solo.fxml"));
@@ -82,25 +82,27 @@ public class TrainingGame extends Game {
         stage.show();
     }
 
+    //Game loop
     public void timerStart(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    System.out.println(getGamestate());
                     timerlbl.setText(String.valueOf(countdown));
                     countdown--;
                     if(countdown < 0){
+                        inputTimes.add(System.currentTimeMillis());
+                        //System.out.println("utilcharcounter: " + utilcharcounter);
+                        //System.out.println("hitcounter: " + hitcounter);
                         if (utilcharcounter > 0)  utilcharcounter -= hitcounter;
                         getText().setText("Press reset button to play again");
                         setWpm();
                         setAccuracy();
                         setRegularity();
                         getInput().setEditable(false);
-                        //System.out.println("utilcharcounter: " + utilcharcounter);
+
                         //System.out.println("errorcounter: " + errorcounter);
                         //System.out.println("inputcounter: " + inputcounter);
-                        //System.out.println("hitcounter: " + hitcounter);
                         setGamestate(false);
                         timer.purge();
                         timer.cancel();
