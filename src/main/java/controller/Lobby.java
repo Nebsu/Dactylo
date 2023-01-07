@@ -43,24 +43,25 @@ public class Lobby {
 
     @FXML
     public void initialize() {
-        try {
-            if (visited) return;
-            visited = true;
-            this.socket = new Socket(Server.getServerIP(), Server.SERVER_PORT);
-            this.out = new PrintWriter(socket.getOutputStream(), true);
-            connection = new ServerConnection(socket, this);
-            new Thread(connection).start();
-            LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-            Gson gson = new Gson();
-            map.put("message", "Connection");
-            map.put("pseudo", PLAYER.getName());
-            String message = gson.toJson(map);
-            out.println(message);
-        } catch (SocketException se) {
-            System.out.println("[CLIENT] Client disconnected");
-        } catch (IOException io) {
-            io.printStackTrace();
-            System.err.println("Lobby IOException");
+        while (!visited) {
+            try {
+                this.socket = new Socket(Server.getServerIP(), Server.SERVER_PORT);
+                this.out = new PrintWriter(socket.getOutputStream(), true);
+                connection = new ServerConnection(socket, this);
+                new Thread(connection).start();
+                LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+                Gson gson = new Gson();
+                map.put("message", "Connection");
+                map.put("pseudo", PLAYER.getName());
+                String message = gson.toJson(map);
+                out.println(message);
+                visited = true;
+            } catch (SocketException se) {
+                System.out.println("[CLIENT] Client disconnected");
+            } catch (IOException io) {
+                io.printStackTrace();
+                System.err.println("Lobby IOException");
+            }
         }
     }
 
