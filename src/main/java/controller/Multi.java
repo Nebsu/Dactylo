@@ -25,8 +25,8 @@ public final class Multi extends Game {
 
     private int health = DEFAULT_HEALTH;
     private int wordCount = DEFAULT_WORD_COUNT;
-    private int score = 0;
     private boolean isNewWord = false;
+    private boolean isDead = false;
 
     @FXML private Label healthlbl = new Label();
     @FXML private Label wordsLeft = new Label();
@@ -92,9 +92,8 @@ public final class Multi extends Game {
                 if (!getWords().get(0).toString().equals(word)) {
                     health -= compareWords(getWords().get(0).toString(), word);
                     healthlbl.setText(""+health);
-                    if (health <= 0) this.gameOver();
+                    if (health <= 0 && !isDead) this.gameOver();
                 } else {
-                    score += word.length();
                     if (getWords().get(0).getType() == 'b') {
                         health += word.length();
                         healthlbl.setText("" + health);
@@ -164,7 +163,7 @@ public final class Multi extends Game {
                     healthlbl.setText("" + health);
                 }
                 // Game over : 
-                if (health <= 0) {
+                if (health <= 0 && !isDead) {
                     try {
                         this.gameOver();
                     } catch (IOException e) {
@@ -193,6 +192,7 @@ public final class Multi extends Game {
         PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
         out.println(s);
         podiumRequest();
+        isDead = true;
     }
 
 /**
@@ -259,22 +259,29 @@ public final class Multi extends Game {
  * 
  * @param event the event that triggered the method
  */
-    public void restart_game(ActionEvent event) throws IOException {
-        LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
-        map.put("message", "Replay");
-        Gson gson = new Gson();
-        String s = gson.toJson(map);
-        PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
-        out.println(s);
+    public void restart_game(ActionEvent event) {
+        Platform.runLater(() -> {
+            LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
+            map.put("message", "Replay");
+            Gson gson = new Gson();
+            String s = gson.toJson(map);
+            try {
+                PrintWriter out = new PrintWriter(Lobby.getConnection().getSocket().getOutputStream(), true);
+                out.println(s);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("IOException Multi");
+            }
+        });
+
     }
 
 /**
  * It resets the game to its initial state
  */
     public void replay() {
-        this.score = 0;
+        isDead = false;
         this.health = DEFAULT_HEALTH;
-        this.healthlbl.setText("" + health);
         remakeList();
         displayMalus();
         try {
@@ -293,6 +300,7 @@ public final class Multi extends Game {
         getInput().setVisible(true);
         getInput().clear();
         getInput().setEditable(true);
+        this.healthlbl.setText("" + String.valueOf(health));
     }
 
 }

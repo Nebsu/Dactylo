@@ -28,7 +28,6 @@ public final class TrainingGame extends Game {
     private int hitcounter = 0;
     private int errorcounter = 0;
     private int utilcharcounter = 0;
-    private int inputcounter = 0;
     Timer timer = new Timer();
     private int countdown = 60;
     private boolean isNewWord = false;
@@ -166,7 +165,6 @@ public final class TrainingGame extends Game {
         hitcounter = 0;
         utilcharcounter = 0;
         errorcounter = 0;
-        inputcounter = 0;
         inputTimes.clear();
         setGamestate(false);
         timerlbl.setText("" + countdown);
@@ -208,7 +206,6 @@ public final class TrainingGame extends Game {
             //getInput().setEditable(false);
             isNewWord = true;
         }else if (event.getCode() != KeyCode.SPACE && event.getCode() != KeyCode.BACK_SPACE && event.getCode() != KeyCode.ESCAPE && getGamestate()) {
-            inputcounter++;
             if(isNewWord){
                 getInput().clear();
                 isNewWord = false;

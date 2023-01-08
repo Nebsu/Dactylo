@@ -181,7 +181,7 @@ public sealed class Game permits TrainingGame, Solo, Multi {
             if (word.getType() == 'b') {
                 text.setFill(Color.web("#95d5b2"));
             } else if (word.getType() == 'm') {
-                text.setFill(Color.web("#ff0000"));
+                text.setFill(Color.web("#890007"));
             } else {
                 text.setFill(Color.web("#383734"));
             }

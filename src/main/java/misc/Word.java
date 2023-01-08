@@ -26,7 +26,7 @@ public final class Word {
         int n = random.nextInt(10);
         if (n == 0) {
             return 'b';
-        } else if (n == 1 || n == 2) {
+        } else if (n == 1 || n == 2 || n == 3 || n == 4) {
             return 'm';
         } else {
             return 'n';
