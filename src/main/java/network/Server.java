@@ -21,11 +21,11 @@ public final class Server implements Runnable {
     private boolean running = false;
     private boolean inGame = false;
     private final List<ClientHandler> clients = new ArrayList<>();
-    private final ExecutorService pool = Executors.newFixedThreadPool(10);
+    private final ExecutorService pool = Executors.newFixedThreadPool(10); // thread pool
     private final List<Player> playersList = new ArrayList<>();
     private final List<Player> readyPlayers = new ArrayList<>();
     private final List<Player> alivePlayers = new ArrayList<>();
-    private final List<Player> podium = new ArrayList<>();
+    private final List<Player> podium = new ArrayList<>(); // final results
 
     private Server(int port) throws IOException {
         this.ss = new ServerSocket(port);
