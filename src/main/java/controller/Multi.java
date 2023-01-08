@@ -282,8 +282,7 @@ public final class Multi extends Game {
     public void replay() {
         isDead = false;
         this.health = DEFAULT_HEALTH;
-        remakeList();
-        displayMalus();
+        this.healthlbl.setText("" + health);
         try {
             Thread.sleep(1000);
             this.podiumRequest();
@@ -300,7 +299,8 @@ public final class Multi extends Game {
         getInput().setVisible(true);
         getInput().clear();
         getInput().setEditable(true);
-        this.healthlbl.setText("" + String.valueOf(health));
+        remakeList();
+        displayMalus();
     }
 
 }
