@@ -46,6 +46,7 @@ public final class Lobby {
     public void initialize() {
         try {
             if (visited) return;
+            // Connection to the server :
             this.socket = new Socket();
             socket.connect(new InetSocketAddress(Server.getServerIP(), Server.SERVER_PORT), 15000);
             this.out = new PrintWriter(socket.getOutputStream(), true);
@@ -67,6 +68,7 @@ public final class Lobby {
     }
 
     public void ready_to_play(ActionEvent event) throws IOException {
+        // Player is ready to play :
         PLAYER.setReady(true);
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         Gson gson = new Gson();
@@ -79,6 +81,7 @@ public final class Lobby {
     }
 
     public void startMulti() throws IOException {
+        // Start the game :
         ActionEvent event = start;
         Parent root = FXMLLoader.load(getClass().getResource("../multi.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -89,6 +92,7 @@ public final class Lobby {
     }
 
     public void drawNames(List<String> playersNamesList) {
+        // Repaint the players names list :
         Platform.runLater(() -> {
             this.flow.getChildren().clear();
             for (String name : playersNamesList) {

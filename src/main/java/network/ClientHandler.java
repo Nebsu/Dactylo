@@ -30,7 +30,7 @@ public final class ClientHandler implements Runnable {
     public int getId() {return this.id;}
  
     /**
-     * It reads the request from the client, and then depending on the request
+     * It reads the request from the client, and then depending on the request does the corresponding action.
      */
     @Override
     public void run() {

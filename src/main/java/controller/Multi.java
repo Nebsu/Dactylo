@@ -41,7 +41,7 @@ public final class Multi extends Game {
 
 /**
  * It sets the color of the textfield, sets a new dictionary, makes a new list, displays the malus,
- * sets the words left, sets the health, and then it requests the podium
+ * sets the words left, sets the health, and then it requests the list of alive players
  */
     public void initialize() {
         Lobby.getConnection().setMulti(this);
@@ -181,7 +181,7 @@ public final class Multi extends Game {
     }
 
 /**
- * It sends a message to the server to tell it that the game is over, and then it requests the podium
+ * It sends a message to the server to tell it that the game is over, and then it requests the current players alive
  */
     public void gameOver() throws IOException {
         getInput().setVisible(false);
@@ -214,7 +214,7 @@ public final class Multi extends Game {
     }
 
 /**
- * It sends a message to the server
+ * It sends a message to the server to request the current players alive
  */
     public void podiumRequest() throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
@@ -237,8 +237,7 @@ public final class Multi extends Game {
     }
 
 /**
- * It takes a list of names, clears the results pane, and then adds a new text element for each name in
- * the list
+ * It draws the final results of the game on the screen
  * 
  * @param names List of names to be displayed
  */

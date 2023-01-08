@@ -33,7 +33,7 @@ public final class ServerConnection implements Runnable {
     public void setMulti(Multi m) {multi = m;}
 
     /**
-     * It reads a line from the server, parses it with Gson, and then does something depending on the
+     * It reads a line from the server, parses it with Gson, and then does the correct action depending on the
      * message
      */
     @Override
