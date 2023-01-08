@@ -1,9 +1,1 @@
-default:false
-health:17
-score:42
-wordCount:9
-level:1
-username:Mario
-difficulty:src/main/dictionary/easy.txt
-maxWords:15
-words:risk,n;green,m;face,m;believe,m;true,n;miss,b;professor,n;simply,m;should,n;rich,n;sound,n;participant,n;foreign,m;
+default:true

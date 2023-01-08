@@ -262,6 +262,7 @@ public final class Solo extends Game {
         level = DEFAULT_LEVEL;
         levellbl.setText("" + level);
         interval = 3*Math.pow(0.9, level);
+        wordsLeft.setText("" + getWords().size());
         setGamestate(false);
         getInput().setEditable(true);
         getInput().setDisable(false);
