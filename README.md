@@ -1,6 +1,6 @@
 Projet Dactylo-Game CPOO5
 
-Binome 17 : 
+Binôme 17 : 
 ZEYNALI Kyan
 ZHOU Sebastien
 
@@ -35,7 +35,7 @@ Ainsi, les joueurs arrivent dans une sorte de salle attente où le nom de chaque
 Une fois qu'un joueur se sent prêt à commencer la partie, il clique sur le bouton "Ready".
 La partie commence une fois que tous les joueurs dans la salle d'attente ont appuyé sur le bouton "Ready".
 Par conséquent, n'appuyez pas trop vite sur le bouton "Ready" si vous devez attendre d'autres joueurs.
-Enfin, une fois la partie terminée, les joueurs peuvent rejouer la partie, avec donc les même adversaires.
+Enfin, une fois la partie terminée, les joueurs peuvent rejouer la partie, avec donc les mêmes adversaires.
 Si des joueurs doivent rejoindre ou quitter la partie, chaque joueur devra redémarrer l'application.
 
 
@@ -56,7 +56,7 @@ Fonctionnalités implémentées :
 - Application Dactylo avec JavaFX pour l'interface graphique
 - Serveur avec java.net.Socket pour le mode multijoueur
 - Communcation Client-Serveur via packets avec com.google.gson.Gson
-- Mode Entrainment avec les statistiques
+- Mode Entrainement avec les statistiques
 - Mode Solo avec sauvegarde de la progression
 - Mode Multijoueur avec modèle Client-Serveur
 - Quelques tests concernant les mots avec Gradle pour le build
