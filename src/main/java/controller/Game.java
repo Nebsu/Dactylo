@@ -41,8 +41,8 @@ public class Game {
     protected Stage stage;
     @FXML
     private TextField input = new TextField();
-    @FXML
-    private Label text = new Label();
+
+    public Game(){}
 
     public ArrayList<Word> getDictionary() {
         return dictionary;
@@ -117,7 +117,6 @@ public class Game {
         }
         stream.forEach(s -> {
             words.add(s);
-            this.text.setText(this.text.getText() + s + " ");
         });
     }
 
