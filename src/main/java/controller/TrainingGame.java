@@ -21,9 +21,9 @@ import java.util.TimerTask;
 
 import misc.*;
 
-public class TrainingGame extends Game {
+public final class TrainingGame extends Game {
 
-    private ArrayList<Long> inputTimes = new ArrayList<>();
+    private final ArrayList<Long> inputTimes = new ArrayList<>();
     //number of times the user has hit the space bar = number of words typed
     private int hitcounter = 0;
     private int errorcounter = 0;
@@ -33,17 +33,14 @@ public class TrainingGame extends Game {
     private int countdown = 60;
     private boolean isNewWord = false;
     private DecimalFormat df = new DecimalFormat("#.#");
-    @FXML
-    private Label timerlbl = new Label();
-    @FXML
-    private Label wpm = new Label();
-    @FXML
-    private Label accuracy = new Label();
-    @FXML
-    private Label regularity = new Label();
-    @FXML
-    private Scene scene;
-    private Stage stage;
+
+    @FXML private Label timerlbl = new Label();
+    @FXML private Label wpm = new Label();
+    @FXML private Label accuracy = new Label();
+    @FXML private Label regularity = new Label();
+    @FXML private Scene scene;
+    @FXML private Stage stage;
+
 
     /**
      * When the user types in the textfield, the program checks if the character is correct or not. If

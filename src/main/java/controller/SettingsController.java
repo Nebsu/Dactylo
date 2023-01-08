@@ -16,7 +16,7 @@ import java.io.IOException;
 import misc.Global;
 import network.Server;
 
-public class SettingsController {
+public final class SettingsController {
 
     private String selectedOption;
     private int selectedOption2;

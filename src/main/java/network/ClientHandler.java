@@ -13,11 +13,11 @@ import static network.Server.SERVER;
 
 @SuppressWarnings("unchecked")
 
-public class ClientHandler implements Runnable {
+public final class ClientHandler implements Runnable {
 
-    private Socket socket;
-    private int id;
-    private BufferedReader in;
+    private final Socket socket;
+    private final int id;
+    private final BufferedReader in;
     private Player player;
 
     public ClientHandler(Socket socket, int id) throws IOException {

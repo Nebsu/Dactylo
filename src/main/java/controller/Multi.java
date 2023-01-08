@@ -21,7 +21,7 @@ import static misc.Global.*;
 import misc.Global;
 import misc.Word;
 
-public class Multi extends Game {
+public final class Multi extends Game {
 
     private int health = DEFAULT_HEALTH;
     private int wordCount = DEFAULT_WORD_COUNT;
@@ -37,6 +37,7 @@ public class Multi extends Game {
     @FXML private Button restart;
     @FXML private GridPane multi;
     @FXML private GridPane endgame;
+    
 
 /**
  * It sets the color of the textfield, sets a new dictionary, makes a new list, displays the malus,
@@ -133,7 +134,7 @@ public class Multi extends Game {
  * 
  * @param word The word that the player has guessed
  */
-    private void sendWord(String word) throws IOException {
+    public void sendWord(String word) throws IOException {
         LinkedTreeMap<String, Object> map = new LinkedTreeMap<>();
         map.put("message", "SendWord");
         map.put("word", word);

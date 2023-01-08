@@ -7,7 +7,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,7 +27,7 @@ import misc.GameSettings;
 import misc.Global;
 import misc.Word;
 
-public class Game {
+public sealed class Game permits TrainingGame, Solo, Multi {
     
     private boolean gamestate = false;
     private ArrayList<Word> dictionary = new ArrayList<>();
@@ -42,34 +41,32 @@ public class Game {
     @FXML
     private TextField input = new TextField();
 
-    public Game(){}
-
-    public ArrayList<Word> getDictionary() {
+    public final ArrayList<Word> getDictionary() {
         return dictionary;
     }
 
-    public ArrayList<Word> getWords() {
+    public final ArrayList<Word> getWords() {
         return words;
     }
 
-    public TextFlow getText() {
+    public final TextFlow getText() {
         return textFlow;
     }
 
-    public void setText(TextFlow text) { this.textFlow = text; }
+    public final void setText(TextFlow text) { this.textFlow = text; }
 
-    public TextField getInput() {
+    public final TextField getInput() {
         return input;
     }
 
-    public boolean getGamestate() { return gamestate; }
+    public final boolean getGamestate() { return gamestate; }
 
-    public void setGamestate(boolean gamestate) { this.gamestate = gamestate; }
+    public final void setGamestate(boolean gamestate) { this.gamestate = gamestate; }
 
 /**
  * It sets the background color of the text field
  */
-    public void setTextFieldColor(){
+    public final void setTextFieldColor(){
         Color color = Color.web("#95d5b2");
         BackgroundFill background_fill = new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(background_fill);
@@ -81,7 +78,7 @@ public class Game {
  * 
  * @param event The event that triggered the method.
  */
-    public void back(ActionEvent event) throws IOException {
+    public final void back(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../menu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -107,7 +104,7 @@ public class Game {
 /**
  * It generates a random word from the dictionary, and adds it to the list of words
  */
-    public void remakeList() {
+    public final void remakeList() {
         words.clear();
         Stream<Word> stream;
         if (GameSettings.getDifficultyName().equals("Easy")){
@@ -123,7 +120,7 @@ public class Game {
 /**
  * It reads a file and adds each line to a list
  */
-    public void setNewDictionary(){
+    public final void setNewDictionary(){
         try {
             dictionary.clear();
             BufferedReader in = new BufferedReader(new FileReader(GameSettings.getDifficulty()));
@@ -142,7 +139,7 @@ public class Game {
  * 
  * @param newText The text to be displayed in the TextFlow.
  */
-    public void setNewText(String newText) {
+    public final void setNewText(String newText) {
         Text text = new Text(newText);
             text.setTranslateY(7);
             text.setFont(javafx.scene.text.Font.font("System", 20));
@@ -154,7 +151,7 @@ public class Game {
 /**
  * It takes a list of words, and displays them in a TextFlow object
  */
-    public void displayList(){
+    public final void displayList(){
         textFlow.getChildren().clear();
         textFlow.setTextAlignment(TextAlignment.CENTER);;
         for(Word word: getWords()) {
@@ -174,7 +171,7 @@ public class Game {
      * It takes a list of words, and for each word, it creates a Text object, sets the font, and adds
      * it to a TextFlow object
      */
-    public void displayMalus(){
+    public final void displayMalus(){
         textFlow.getChildren().clear();
         textFlow.setTextAlignment(TextAlignment.CENTER);;
         for(Word word: getWords()) {
@@ -199,7 +196,7 @@ public class Game {
      * @param word2 the word that you want to compare to
      * @return The difference between the two words.
      */
-    public int compareWords(String word1, String word2){
+    public final int compareWords(String word1, String word2){
         int difference = 0;
         if(word1.length() > word2.length()){
             for(int i = 0; i < word2.length(); i++){

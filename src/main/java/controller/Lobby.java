@@ -26,7 +26,7 @@ import misc.Global;
 import network.Server;
 import network.ServerConnection;
 
-public class Lobby {
+public final class Lobby {
     
     @FXML private Stage stage;
     @FXML private Scene scene;

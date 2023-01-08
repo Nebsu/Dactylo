@@ -15,7 +15,7 @@ import controller.Multi;
 
 @SuppressWarnings("unchecked")
 
-public class ServerConnection implements Runnable {
+public final class ServerConnection implements Runnable {
 
     private final Socket socket;
     private final BufferedReader in;

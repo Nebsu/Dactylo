@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import misc.Global;
 
-public class Dactylo extends Application {
+public final class Dactylo extends Application {
     
 /**
  * It loads the menu.fxml file, sets the title of the window, shows the window, sets the scene, and
